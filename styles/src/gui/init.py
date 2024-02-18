@@ -1,4 +1,7 @@
+import tkinter
+import tkinter.ttk as ttk
 import customtkinter
+
 
 class App(customtkinter.CTk):
 
@@ -9,9 +12,6 @@ class App(customtkinter.CTk):
         self.geometry("1000x500")
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure((0, 1), weight=1)
-
-     self.checkbox_frame = customtkinter.CTkFrame(self)
-        
 
 
 app = App()
