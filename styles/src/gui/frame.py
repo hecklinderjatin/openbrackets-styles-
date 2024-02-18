@@ -25,7 +25,6 @@ frame_inps = customtkinter.CTkScrollableFrame(app, orientation="vertical", label
 frame_inps.grid(row=0, column=2, rowspan=2, pady=10, padx=10, sticky="nsew")
 
 
-
 ttk_style = ttk.Style()
 ttk_style.configure(frame_lay.winfo_class(), background='red')
 
