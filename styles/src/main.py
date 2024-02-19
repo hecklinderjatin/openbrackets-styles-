@@ -1,4 +1,5 @@
-from gui.frame import run_tkinter_app
+# main.py
+from gui.frame import run_gui
 
 if __name__ == "__main__":
-    run_tkinter_app()
+    frame2 = run_gui()
