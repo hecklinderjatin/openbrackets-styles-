@@ -16,26 +16,24 @@ def run_tkinter_app():
     app.geometry("1000x500")
     app.title("STYLES")
 
-    app.rowconfigure(0, weight=1)
-    app.columnconfigure(0, weight=1)
-    app.columnconfigure(1, weight=4)
-    app.columnconfigure(2, weight=1)
+    app.grid_rowconfigure(1, weight=1)
+    app.grid_rowconfigure(0, weight=1)
+    app.grid_rowconfigure(1, weight=4)
+    app.grid_rowconfigure(2, weight=1)
 
     frame_lay = customtkinter.CTkScrollableFrame(app, orientation="vertical", label_text="Layout", corner_radius=0)
-    frame_lay.grid(row=0, column=0, rowspan=2, pady=10, padx=10, sticky="nsew")
+    frame_lay.grid(row=0, column=0, rowspan=2, pady=10, padx=10, sticky="nsew")    
+    add_button_button = customtkinter.CTkButton(frame_lay, text="Add Button", command=lambda: add_button(frame_canv))
+    add_button_button.pack()
 
-    frame_canv = tkinter.Frame(master=app)
-    frame_canv.grid(padx=20, pady=20, row=0, column=1, rowspan=3, sticky="nsew")
+    frame_canv = customtkinter.CTkFrame(master=app)
+    frame_canv.grid(padx=10, pady=10, row=0, column=1, rowspan=4, sticky="nsew")
 
     frame_inps = customtkinter.CTkScrollableFrame(app, orientation="vertical", label_text="Inspector", corner_radius=0)
     frame_inps.grid(row=0, column=2, rowspan=2, pady=10, padx=10, sticky="nsew")
 
     ttk_style = ttk.Style()
     ttk_style.configure(frame_lay.winfo_class(), background='red')
-
-    # Create a button on the canvas frame to add new buttons
-    add_button_button = customtkinter.CTkButton(frame_lay, text="Add Button", command=lambda: add_button(frame_canv))
-    add_button_button.pack()
 
     app.mainloop()
 
