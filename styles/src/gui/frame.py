@@ -20,6 +20,9 @@ def run_gui():
     button_add_label = ctk.CTkButton(frame1, text="Add Label", command=lambda: functions.add_label_to_frame2(frame2))
     button_add_label.pack()
 
+    add_button_checkbox = ctk.CTkButton(frame1,text="Add CheckBox",command=lambda:functions.add_checkbox_to_frame2(frame2))
+    add_button_checkbox.pack()
+
     button_f = ctk.CTkButton(root, text="Convert to HTML", command=lambda: html.convert_frame2_details_to_html(frame2))  # Correct function call
     button_f.pack()
 

@@ -11,3 +11,8 @@ def add_label_to_frame2(frame2):
     new_label = ctk.CTkLabel(frame2, text="New Label")
     new_label.pack()
     pass
+
+def add_checkbox_to_frame2(frame2):
+    new_checkbox = ctk.CTkCheckBox(frame2,text="Check Box")
+    new_checkbox.pack()
+    pass
