@@ -18,10 +18,13 @@ def convert_frame2_details_to_html(frame2):
     
     children = frame2.winfo_children()
     for child in children:
+
         if isinstance(child, ctk.CTkButton):
             details += f"<button>{child.cget('text')}</button><br>"
+        
         elif isinstance(child, ctk.CTkLabel):
             details += f"<label>{child.cget('text')}</label><br>"
+        
         elif isinstance(child, ctk.CTkCheckBox):
             details += f"""<input type="checkbox">
   <label>{child.cget('text')}</label><br>"""
