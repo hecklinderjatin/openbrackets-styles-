@@ -38,10 +38,14 @@ def run_gui():
     selection = {"widget": None}
 
     def select_widget(widget):
+        print("Selecting widget:", widget)  # Print the widget being selected
         if selection["widget"]:
-            selection["widget"].config(relief=tk.FLAT)  # Reset previously selected widget appearance
+            print("Resetting previously selected widget appearance")
+            selection["widget"].configure(relief=tk.FLAT)  # Reset previously selected widget appearance
         selection["widget"] = widget
-        selection["widget"].config(relief=tk.SUNKEN)  # Highlight currently selected widget
+        selection["widget"].configure(relief=tk.SUNKEN)  # Highlight currently selected widget
+        print("Widget selection complete")
+
 
     button_add_button = ctk.CTkButton(frame1, text="Add Button", command=lambda: select_widget(functions.add_button_to_frame2(frame2)))
     button_add_button.pack()
@@ -63,10 +67,11 @@ def run_gui():
         selected_widget = selection["widget"]
         if selected_widget:
             # Update properties of the selected widget
-            selected_widget.config(**{
+            selected_widget.configure(**{
                 "text": text_var.get(),
-                "bg": bg_var.get(),
-                "fg": fg_var.get(),
+                "bg_color": bg_var.get(),
+                "fg_color": fg_var.get(),
+                "text_color": txtcol_var.get(),
                 # Add more properties as needed
             })
 
@@ -74,7 +79,8 @@ def run_gui():
     text_var = tk.StringVar()
     bg_var = tk.StringVar()
     fg_var = tk.StringVar()
-
+    txtcol_var=tk.StringVar()
+    
     property_frame = ctk.CTkFrame(frame3)
     property_frame.pack()
 
@@ -90,6 +96,10 @@ def run_gui():
     fg_entry = ctk.CTkEntry(property_frame, textvariable=fg_var)
     fg_entry.pack()
 
+    ctk.CTkLabel(property_frame, text="text color:").pack()
+    fg_entry = ctk.CTkEntry(property_frame, textvariable=txtcol_var)
+    fg_entry.pack()
+    
     update_button = ctk.CTkButton(property_frame, text="Update Properties", command=update_properties)
     update_button.pack()
 
