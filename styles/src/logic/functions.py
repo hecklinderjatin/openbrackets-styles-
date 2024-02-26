@@ -5,7 +5,7 @@ import customtkinter as ctk
 def add_button_to_frame2(frame2):
     new_button = ctk.CTkButton(frame2, text="New Button")
     new_button.pack()
-    return new_button  # Return the button object
+    return new_button  
 
 
 def add_label_to_frame2(frame2):
@@ -14,6 +14,9 @@ def add_label_to_frame2(frame2):
     return new_label
 
 def add_checkbox_to_frame2(frame2):
-    new_checkbox = ctk.CTkCheckBox(frame2,text="Check Box",fg_color="blue")
+    new_checkbox = ctk.CTkCheckBox(frame2,text ="Check Box",fg_color="blue")
     new_checkbox.pack()
     return new_checkbox
+
+
+
