@@ -1,8 +1,9 @@
-from cProfile import label
+
 import tkinter as tk
 import customtkinter as ctk
 from logic import functions
 from logic import html
+from logic import css
 
 def run_gui():
     root = ctk.CTk()
@@ -39,9 +40,6 @@ def run_gui():
     frame2.grid_columnconfigure(1, weight=3, uniform="fixed")
     frame2.grid_columnconfigure(2, weight=1, uniform="fixed")
 
-    # Dictionary to keep track of the selected widget
-    selection = {"widget": None}
-
     def select_widget(widget):
         print("Selecting widget:", widget)  # Print the widget being selected
 
@@ -52,12 +50,7 @@ def run_gui():
         selection["widget"].configure(relief=tk.SUNKEN)  # Highlight currently selected widget
         print("Widget selection complete")
 
-    def delete_widget():
-        selected_widget = selection["widget"]
-        if selected_widget:
-            selected_widget.destroy()  # Destroy the selected widget
-            selection["widget"] = None  # Reset the selected widget
-
+    
     button_add_button = ctk.CTkButton(frame1, text="Add Button", command=lambda: select_widget(functions.add_button_to_frame2(frame2)))
     button_add_button.pack()
 
@@ -67,16 +60,19 @@ def run_gui():
     add_button_checkbox = ctk.CTkButton(frame1, text="Add CheckBox", command=lambda: select_widget(functions.add_checkbox_to_frame2(frame2)))
     add_button_checkbox.pack()
 
-    button_f = ctk.CTkButton(frame4, text="Convert to HTML", command=lambda: html.convert_frame2_details_to_html(frame2))
+    button_f = ctk.CTkButton(frame4, text="Convert to HTML", command=lambda: (html.convert_frame2_details_to_html(frame2), css.convert_frame2_details_to_css(frame2)))
     button_f.pack()
 
     button_close = ctk.CTkButton(frame4, text="Close App", command=root.destroy)
     button_close.pack()
 
-    
-    
 
-    # Function to update properties from inspector panel
+    # inspector code
+
+    # Dictionary to keep track of the selected widget
+    selection = {"widget": None}
+
+        # Function to update properties from inspector panel
     def update_properties():
         selected_widget = selection["widget"]
         if selected_widget:
@@ -95,8 +91,6 @@ def run_gui():
     bg_var = tk.StringVar()
     fg_var = tk.StringVar()
     txtcol_var = tk.StringVar()
-    
-    # inspector code
     
     
     
@@ -128,11 +122,7 @@ def run_gui():
     txtcol_entry = ctk.CTkEntry(property_frame, textvariable=txtcol_var)
     txtcol_entry.grid(row=3, column=2, columnspan=4,sticky="e")
 
-    '''ctk.CTkLabel(property_frame, text="font:").grid(row=4, column=0,columnspan=2,sticky='w')
-    font_entry= ctk.CTkEntry(property_frame, textvariable=font_var)
-    font_entry.grid(row=4, column=2, columnspan=4,sticky="e")'''
-
-    button_delete = ctk.CTkButton(property_frame, text="Delete Widget", command=delete_widget)
+    button_delete = ctk.CTkButton(property_frame, text="Delete Widget", command=functions.delete_widget)
     button_delete.grid(row=5, column=2, columnspan=2)
 
     update_button = ctk.CTkButton(property_frame, text="Update Properties", command=update_properties)

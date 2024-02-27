@@ -18,5 +18,15 @@ def add_checkbox_to_frame2(frame2):
     new_checkbox.pack()
     return new_checkbox
 
+    # Dictionary to keep track of the selected widget
+selection = {"widget": None}
+
+def delete_widget():
+        selected_widget = selection["widget"]
+        if selected_widget:
+            selected_widget.destroy()  # Destroy the selected widget
+            selection["widget"] = None  # Reset the selected widget
+      
 
 
+    

@@ -1,6 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
-from tkinter import filedialog
+
 def update_html_content():
     # Read values from Tkinter variables
     names = names_listbox.get(0, tk.END)
