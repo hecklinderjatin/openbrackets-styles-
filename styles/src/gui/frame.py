@@ -1,4 +1,3 @@
-
 import tkinter as tk
 import customtkinter as ctk
 from logic import functions
@@ -40,24 +39,32 @@ def run_gui():
     frame2.grid_columnconfigure(1, weight=3, uniform="fixed")
     frame2.grid_columnconfigure(2, weight=1, uniform="fixed")
 
-    def select_widget(widget):
-        print("Selecting widget:", widget)  # Print the widget being selected
-
-        if selection["widget"]:
-            print("Resetting previously selected widget appearance")
-            selection["widget"].configure(relief=tk.FLAT)  # Reset previously selected widget appearance
-        selection["widget"] = widget
-        selection["widget"].configure(relief=tk.SUNKEN)  # Highlight currently selected widget
-        print("Widget selection complete")
-
+    selection = {"widget": None}
     
-    button_add_button = ctk.CTkButton(frame1, text="Add Button", command=lambda: select_widget(functions.add_button_to_frame2(frame2)))
+    # Dictionary to keep track of all widgets
+    widget_dict = {}
+
+    # Function to select a widget
+    def select_widget(widget):
+        if selection["widget"]:
+            # Reset previously selected widget appearance
+            selection["widget"].configure(relief=tk.FLAT)
+        selection["widget"] = widget
+        widget_dict[id(widget)] = widget
+        widget.configure(relief=tk.SUNKEN)  # Highlight currently selected widget
+        update_inspector_properties()  # Update inspector panel with widget properties
+
+    def widget_clicked(widget_creation_function):
+        widget = widget_creation_function(frame2)
+        select_widget(widget)
+
+    button_add_button = ctk.CTkButton(frame1, text="Add Button", command=lambda: widget_clicked(functions.add_button_to_frame2))
     button_add_button.pack()
 
-    button_add_label = ctk.CTkButton(frame1, text="Add Label", command=lambda: select_widget(functions.add_label_to_frame2(frame2)))
+    button_add_label = ctk.CTkButton(frame1, text="Add Label", command=lambda: widget_clicked(functions.add_label_to_frame2))
     button_add_label.pack()
 
-    add_button_checkbox = ctk.CTkButton(frame1, text="Add CheckBox", command=lambda: select_widget(functions.add_checkbox_to_frame2(frame2)))
+    add_button_checkbox = ctk.CTkButton(frame1, text="Add CheckBox", command=lambda: widget_clicked(functions.add_checkbox_to_frame2))
     add_button_checkbox.pack()
 
     button_f = ctk.CTkButton(frame4, text="Convert to HTML", command=lambda: (html.convert_frame2_details_to_html(frame2), css.convert_frame2_details_to_css(frame2)))
@@ -69,10 +76,7 @@ def run_gui():
 
     # inspector code
 
-    # Dictionary to keep track of the selected widget
-    selection = {"widget": None}
-
-        # Function to update properties from inspector panel
+    # Function to update properties from inspector panel
     def update_properties():
         selected_widget = selection["widget"]
         if selected_widget:
@@ -82,18 +86,25 @@ def run_gui():
                 "bg_color": bg_var.get(),
                 "fg_color": fg_var.get(),
                 "text_color": txtcol_var.get(),
-                
                 # Add more properties as needed
             })
+
+    # Function to update inspector panel with properties of the selected widget
+    def update_inspector_properties():
+        selected_widget = selection["widget"]
+        if selected_widget:
+            text_var.set(selected_widget.cget("text"))
+            bg_var.set(selected_widget.cget("bg_color"))
+            fg_var.set(selected_widget.cget("fg_color"))
+            txtcol_var.set(selected_widget.cget("text_color"))
+            # Add more properties as needed
 
     # Entry and buttons for modifying properties
     text_var = tk.StringVar()
     bg_var = tk.StringVar()
     fg_var = tk.StringVar()
     txtcol_var = tk.StringVar()
-    
-    
-    
+
     property_frame = ctk.CTkFrame(frame3)
     property_frame.pack()
 
@@ -128,7 +139,6 @@ def run_gui():
     update_button = ctk.CTkButton(property_frame, text="Update Properties", command=update_properties)
     update_button.grid(row=6, column=2, columnspan=2)
 
-
     root.mainloop()
 
-run_gui()
+
