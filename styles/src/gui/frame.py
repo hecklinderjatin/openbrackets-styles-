@@ -3,6 +3,10 @@ import customtkinter as ctk
 from logic import functions
 from logic import html
 from logic import css
+import tkinter.colorchooser as colorchooser
+
+
+
 
 def run_gui():
     root = ctk.CTk()
@@ -23,34 +27,44 @@ def run_gui():
     height = root.winfo_height()
     width = int(height * (16 / 9))
 
-    frame2 = ctk.CTkFrame(root, width=width, height=height, fg_color='white')
+    frame2 = ctk.CTkScrollableFrame(root, width=width, height=height, fg_color='white', orientation="vertical")
     frame2.grid(row=2, column=1, rowspan=6, pady=10, padx=10, sticky="nsew")
 
-    frame3 = ctk.CTkScrollableFrame(root, orientation="vertical", label_text="Inspector")
+    frame3 = ctk.CTkFrame(root)  # Removed label_text argument
     frame3.grid(row=1, column=2, columnspan=1, rowspan=10, pady=10, padx=10, sticky="nsew")
+    tabview = ctk.CTkTabview(frame3)
+    tabview.pack(padx=1, pady=1)
+
+    tab_1 = tabview.add("tab 1")
+    tabview.insert(0, "tab 2")
+    tabview.add("tab 42")
+    tabview.set("tab 42")
+    tabview.delete("tab 42")
+    tabview.insert(0, "tab 42")
+    tabview.delete("tab 42")
+    tabview.insert(1, "tab 42")
+    tabview.delete("tab 42")
+
+    tabview.move(0, "tab 2")
 
     frame4 = ctk.CTkFrame(root)
-    frame4.grid(row=0, column=2, rowspan=1, pady=10, padx=10, sticky="nsew",)
+    frame4.grid(row=0, column=2, rowspan=1, pady=10, padx=10, sticky="nsew")
 
     for i in range(10):  # Adjusted to the number of rows needed
         frame2.grid_rowconfigure(i, weight=1)
+        frame2.grid_columnconfigure(i, weight=1, uniform="fixed")
 
-    frame2.grid_columnconfigure(0, weight=1, uniform="fixed")
-    frame2.grid_columnconfigure(1, weight=3, uniform="fixed")
-    frame2.grid_columnconfigure(2, weight=1, uniform="fixed")
+    frame5 =ctk.CTkScrollableFrame(root, orientation="vertical", label_text="Elements In Canvas")
+    frame5.grid(row=5, column=0, rowspan=10, pady=10, padx=10, sticky="nsew")
 
     selection = {"widget": None}
-    
-    # Dictionary to keep track of all widgets
-    widget_dict = {}
 
-    # Function to select a widget
+      # Function to select a widget
     def select_widget(widget):
         if selection["widget"]:
             # Reset previously selected widget appearance
             selection["widget"].configure(relief=tk.FLAT)
         selection["widget"] = widget
-        widget_dict[id(widget)] = widget
         widget.configure(relief=tk.SUNKEN)  # Highlight currently selected widget
         update_inspector_properties()  # Update inspector panel with widget properties
 
@@ -73,7 +87,6 @@ def run_gui():
     button_close = ctk.CTkButton(frame4, text="Close App", command=root.destroy)
     button_close.pack()
 
-
     # inspector code
 
     # Function to update properties from inspector panel
@@ -88,6 +101,30 @@ def run_gui():
                 "text_color": txtcol_var.get(),
                 # Add more properties as needed
             })
+    
+    property_frame = tabview.tab("tab 2")
+
+
+    bg_canvas = tk.Canvas(property_frame, width=40, height=20, bg="white", highlightthickness=0)
+    bg_canvas.grid(row=1, column=3, padx=(5, 0), sticky="w")
+
+    fg_canvas = tk.Canvas(property_frame, width=40, height=20, bg="white", highlightthickness=0)
+    fg_canvas.grid(row=2, column=3, padx=(5, 0), sticky="w")
+
+    txtcol_canvas = tk.Canvas(property_frame, width=40, height=20, bg="white", highlightthickness=0)
+    txtcol_canvas.grid(row=3, column=3, padx=(5, 0), sticky="w")
+
+    def open_color_picker_and_update_canvas(variable, canvas):
+        color = colorchooser.askcolor()[1]
+        if color:
+            variable.set(color)
+            canvas.configure(bg=color)
+
+    def delete_widget():
+        selected_widget = selection["widget"]
+        if selected_widget:
+            selected_widget.destroy()  # Destroy the selected widget
+            selection["widget"] = None  # Reset the selected widget
 
     # Function to update inspector panel with properties of the selected widget
     def update_inspector_properties():
@@ -105,40 +142,34 @@ def run_gui():
     fg_var = tk.StringVar()
     txtcol_var = tk.StringVar()
 
-    property_frame = ctk.CTkFrame(frame3)
-    property_frame.pack()
+    property_frame.grid_columnconfigure(0, weight=1, uniform="fixed", pad=0)
+    property_frame.grid_columnconfigure(1, weight=3, uniform="fixed", pad=0)
+    property_frame.grid_columnconfigure(2, weight=1, uniform="fixed", pad=0)
+    property_frame.grid_columnconfigure(3, weight=1, uniform="fixed", pad=0)
 
-    for i in range(10):  # Adjusted to the number of rows needed
-        property_frame.grid_rowconfigure(i, weight=1)
-
-    property_frame.grid_columnconfigure(0, weight=1, uniform="fixed",pad=0)
-    property_frame.grid_columnconfigure(1, weight=3, uniform="fixed",pad=0)
-    property_frame.grid_columnconfigure(2, weight=1, uniform="fixed",pad=0)
-    property_frame.grid_columnconfigure(3, weight=1, uniform="fixed",pad=0)
-    
-    # Adjusting the code to use grid geometry manager for all widgets within property_frame
-    ctk.CTkLabel(property_frame, text="Text:").grid(row=0, column=0,columnspan=2,sticky='w')
+    ctk.CTkLabel(property_frame, text="Text:").grid(row=0, column=0, columnspan=2, sticky='w')
     text_entry = ctk.CTkEntry(property_frame, textvariable=text_var)
-    text_entry.grid(row=0, column=2, columnspan=4,sticky="e")
+    text_entry.grid(row=0, column=0, columnspan=4, sticky="e")
 
-    ctk.CTkLabel(property_frame, text="Background Color:").grid(row=1, column=0,columnspan=2,sticky='w')
-    bg_entry = ctk.CTkEntry(property_frame, textvariable=bg_var)
-    bg_entry.grid(row=1, column=2, columnspan=4,sticky="e")
 
-    ctk.CTkLabel(property_frame, text="Foreground Color:").grid(row=2, column=0,columnspan=2,sticky='w')
-    fg_entry = ctk.CTkEntry(property_frame, textvariable=fg_var)
-    fg_entry.grid(row=2, column=2, columnspan=4,sticky="e")
+    bg_button = ctk.CTkButton(property_frame, text="Background Color", command=lambda: open_color_picker_and_update_canvas(bg_var, bg_canvas))
+    bg_button.grid(row=1, column=0,columnspan=3, sticky="w")
 
-    ctk.CTkLabel(property_frame, text="Text Color:").grid(row=3, column=0,columnspan=2,sticky='w')
-    txtcol_entry = ctk.CTkEntry(property_frame, textvariable=txtcol_var)
-    txtcol_entry.grid(row=3, column=2, columnspan=4,sticky="e")
+    fg_button = ctk.CTkButton(property_frame, text="Foreground Color", command=lambda: open_color_picker_and_update_canvas(fg_var, fg_canvas))
+    fg_button.grid(row=2, column=0,columnspan=3, sticky="w")
 
-    button_delete = ctk.CTkButton(property_frame, text="Delete Widget", command=functions.delete_widget)
-    button_delete.grid(row=5, column=2, columnspan=2)
+    txtcol_button = ctk.CTkButton(property_frame, text="Text Color", command=lambda: open_color_picker_and_update_canvas(txtcol_var, txtcol_canvas))
+    txtcol_button.grid(row=3, column=0,columnspan=3, sticky="w")
 
-    update_button = ctk.CTkButton(property_frame, text="Update Properties", command=update_properties)
-    update_button.grid(row=6, column=2, columnspan=2)
+
+
+    button_delete = ctk.CTkButton(tabview.tab("tab 1"), text="Delete Widget", command=delete_widget)
+    button_delete.grid(row=7, column=0,columnspan=2, sticky="w")
+
+    update_button = ctk.CTkButton(tabview.tab("tab 1"), text="Update Properties", command=update_properties)
+    update_button.grid(row=6, column=0,columnspan=2, sticky="w")
 
     root.mainloop()
+
 
 
