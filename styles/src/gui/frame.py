@@ -6,8 +6,6 @@ from logic import css
 import tkinter.colorchooser as colorchooser
 
 
-
-
 def run_gui():
     root = ctk.CTk()
     root.geometry("1920x1080")
@@ -54,31 +52,16 @@ def run_gui():
         frame2.grid_rowconfigure(i, weight=1)
         frame2.grid_columnconfigure(i, weight=1, uniform="fixed")
 
-    frame5 =ctk.CTkScrollableFrame(root, orientation="vertical", label_text="Elements In Canvas")
-    frame5.grid(row=5, column=0, rowspan=10, pady=10, padx=10, sticky="nsew")
+    frame5 = ctk.CTkScrollableFrame(root, orientation="vertical", label_text="Elements In Canvas")
+    frame5.grid(row=7, column=0, rowspan=10, pady=10, padx=10, sticky="nsew")
 
-    selection = {"widget": None}
-
-      # Function to select a widget
-    def select_widget(widget):
-        if selection["widget"]:
-            # Reset previously selected widget appearance
-            selection["widget"].configure(relief=tk.FLAT)
-        selection["widget"] = widget
-        widget.configure(relief=tk.SUNKEN)  # Highlight currently selected widget
-        update_inspector_properties()  # Update inspector panel with widget properties
-
-    def widget_clicked(widget_creation_function):
-        widget = widget_creation_function(frame2)
-        select_widget(widget)
-
-    button_add_button = ctk.CTkButton(frame1, text="Add Button", command=lambda: widget_clicked(functions.add_button_to_frame2))
+    button_add_button = ctk.CTkButton(frame1, text="Add Button", command=lambda: widget_clicked(functions.add_button(frame2, frame5)))
     button_add_button.pack()
 
-    button_add_label = ctk.CTkButton(frame1, text="Add Label", command=lambda: widget_clicked(functions.add_label_to_frame2))
+    button_add_label = ctk.CTkButton(frame1, text="Add Label", command=lambda: widget_clicked(functions.add_label(frame2, frame5)))
     button_add_label.pack()
 
-    add_button_checkbox = ctk.CTkButton(frame1, text="Add CheckBox", command=lambda: widget_clicked(functions.add_checkbox_to_frame2))
+    add_button_checkbox = ctk.CTkButton(frame1, text="Add CheckBox", command=lambda: widget_clicked(functions.add_checkbox(frame2, frame5)))
     add_button_checkbox.pack()
 
     button_f = ctk.CTkButton(frame4, text="Convert to HTML", command=lambda: (html.convert_frame2_details_to_html(frame2), css.convert_frame2_details_to_css(frame2)))
@@ -88,6 +71,24 @@ def run_gui():
     button_close.pack()
 
     # inspector code
+    selection = {"widget": None}
+    widget_dict = {}
+
+    # Function to handle selection of widgets in frame5
+    def select_widget(widget):
+        if selection["widget"]:
+                # Reset previously selected widget appearance
+                selection["widget"].configure(relief=tk.FLAT)
+        selection["widget"] = widget
+        widget_dict[id(widget)] = widget
+        widget.configure(relief=tk.SUNKEN)  # Highlight currently selected widget
+        update_inspector_properties()  # Update inspector panel with widget properties
+
+    def widget_clicked(widget_tuple):
+        widget, data = widget_tuple
+        select_widget(widget)
+        # Process additional data as needed
+
 
     # Function to update properties from inspector panel
     def update_properties():
@@ -96,23 +97,17 @@ def run_gui():
             # Update properties of the selected widget
             selected_widget.configure(**{
                 "text": text_var.get(),
-                "bg_color": bg_var.get(),
-                "fg_color": fg_var.get(),
-                "text_color": txtcol_var.get(),
-                # Add more properties as needed
+                "bg": bg_var.get(),
+                "fg": fg_var.get(),
             })
-    
-    property_frame = tabview.tab("tab 2")
 
+    property_frame = tabview.tab("tab 2")
 
     bg_canvas = tk.Canvas(property_frame, width=40, height=20, bg="white", highlightthickness=0)
     bg_canvas.grid(row=1, column=3, padx=(5, 0), sticky="w")
 
     fg_canvas = tk.Canvas(property_frame, width=40, height=20, bg="white", highlightthickness=0)
     fg_canvas.grid(row=2, column=3, padx=(5, 0), sticky="w")
-
-    txtcol_canvas = tk.Canvas(property_frame, width=40, height=20, bg="white", highlightthickness=0)
-    txtcol_canvas.grid(row=3, column=3, padx=(5, 0), sticky="w")
 
     def open_color_picker_and_update_canvas(variable, canvas):
         color = colorchooser.askcolor()[1]
@@ -126,21 +121,18 @@ def run_gui():
             selected_widget.destroy()  # Destroy the selected widget
             selection["widget"] = None  # Reset the selected widget
 
-    # Function to update inspector panel with properties of the selected widget
     def update_inspector_properties():
         selected_widget = selection["widget"]
         if selected_widget:
             text_var.set(selected_widget.cget("text"))
             bg_var.set(selected_widget.cget("bg_color"))
             fg_var.set(selected_widget.cget("fg_color"))
-            txtcol_var.set(selected_widget.cget("text_color"))
-            # Add more properties as needed
+            #txtcol_var.set(selected_widget.cget("text_color"))
 
     # Entry and buttons for modifying properties
     text_var = tk.StringVar()
     bg_var = tk.StringVar()
     fg_var = tk.StringVar()
-    txtcol_var = tk.StringVar()
 
     property_frame.grid_columnconfigure(0, weight=1, uniform="fixed", pad=0)
     property_frame.grid_columnconfigure(1, weight=3, uniform="fixed", pad=0)
@@ -151,25 +143,17 @@ def run_gui():
     text_entry = ctk.CTkEntry(property_frame, textvariable=text_var)
     text_entry.grid(row=0, column=0, columnspan=4, sticky="e")
 
-
     bg_button = ctk.CTkButton(property_frame, text="Background Color", command=lambda: open_color_picker_and_update_canvas(bg_var, bg_canvas))
-    bg_button.grid(row=1, column=0,columnspan=3, sticky="w")
+    bg_button.grid(row=1, column=0, columnspan=3, sticky="w")
 
     fg_button = ctk.CTkButton(property_frame, text="Foreground Color", command=lambda: open_color_picker_and_update_canvas(fg_var, fg_canvas))
-    fg_button.grid(row=2, column=0,columnspan=3, sticky="w")
+    fg_button.grid(row=2, column=0, columnspan=3, sticky="w")
 
-    txtcol_button = ctk.CTkButton(property_frame, text="Text Color", command=lambda: open_color_picker_and_update_canvas(txtcol_var, txtcol_canvas))
-    txtcol_button.grid(row=3, column=0,columnspan=3, sticky="w")
+    button_delete = ctk.CTkButton(frame3, text="Delete Widget", command=delete_widget)
+    button_delete.pack(side="left")  # Using pack instead of grid
 
-
-
-    button_delete = ctk.CTkButton(tabview.tab("tab 1"), text="Delete Widget", command=delete_widget)
-    button_delete.grid(row=7, column=0,columnspan=2, sticky="w")
-
-    update_button = ctk.CTkButton(tabview.tab("tab 1"), text="Update Properties", command=update_properties)
-    update_button.grid(row=6, column=0,columnspan=2, sticky="w")
+    update_button = ctk.CTkButton(frame3, text="Update Properties", command=update_properties)
+    update_button.pack(side="left") 
 
     root.mainloop()
-
-
 
