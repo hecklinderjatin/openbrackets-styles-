@@ -55,13 +55,13 @@ def run_gui():
     frame5 = ctk.CTkScrollableFrame(root, orientation="vertical", label_text="Elements In Canvas")
     frame5.grid(row=7, column=0, rowspan=10, pady=10, padx=10, sticky="nsew")
 
-    button_add_button = ctk.CTkButton(frame1, text="Add Button", command=lambda: widget_clicked(functions.add_button(frame2, frame5)))
+    button_add_button = ctk.CTkButton(frame1, text="Add Button", command=lambda:functions.add_button(frame2, frame5))
     button_add_button.pack()
 
-    button_add_label = ctk.CTkButton(frame1, text="Add Label", command=lambda: widget_clicked(functions.add_label(frame2, frame5)))
+    button_add_label = ctk.CTkButton(frame1, text="Add Label", command=lambda:functions.add_label(frame2, frame5))
     button_add_label.pack()
 
-    add_button_checkbox = ctk.CTkButton(frame1, text="Add CheckBox", command=lambda: widget_clicked(functions.add_checkbox(frame2, frame5)))
+    add_button_checkbox = ctk.CTkButton(frame1, text="Add CheckBox", command=lambda:(functions.add_checkbox(frame2, frame5)))
     add_button_checkbox.pack()
 
     button_f = ctk.CTkButton(frame4, text="Convert to HTML", command=lambda: (html.convert_frame2_details_to_html(frame2), css.convert_frame2_details_to_css(frame2)))
@@ -69,37 +69,6 @@ def run_gui():
 
     button_close = ctk.CTkButton(frame4, text="Close App", command=root.destroy)
     button_close.pack()
-
-    # inspector code
-    selection = {"widget": None}
-    widget_dict = {}
-
-    # Function to handle selection of widgets in frame5
-    def select_widget(widget):
-        if selection["widget"]:
-                # Reset previously selected widget appearance
-                selection["widget"].configure(relief=tk.FLAT)
-        selection["widget"] = widget
-        widget_dict[id(widget)] = widget
-        widget.configure(relief=tk.SUNKEN)  # Highlight currently selected widget
-        update_inspector_properties()  # Update inspector panel with widget properties
-
-    def widget_clicked(widget_tuple):
-        widget, data = widget_tuple
-        select_widget(widget)
-        # Process additional data as needed
-
-
-    # Function to update properties from inspector panel
-    def update_properties():
-        selected_widget = selection["widget"]
-        if selected_widget:
-            # Update properties of the selected widget
-            selected_widget.configure(**{
-                "text": text_var.get(),
-                "bg": bg_var.get(),
-                "fg": fg_var.get(),
-            })
 
     property_frame = tabview.tab("tab 2")
 
@@ -114,20 +83,6 @@ def run_gui():
         if color:
             variable.set(color)
             canvas.configure(bg=color)
-
-    def delete_widget():
-        selected_widget = selection["widget"]
-        if selected_widget:
-            selected_widget.destroy()  # Destroy the selected widget
-            selection["widget"] = None  # Reset the selected widget
-
-    def update_inspector_properties():
-        selected_widget = selection["widget"]
-        if selected_widget:
-            text_var.set(selected_widget.cget("text"))
-            bg_var.set(selected_widget.cget("bg_color"))
-            fg_var.set(selected_widget.cget("fg_color"))
-            #txtcol_var.set(selected_widget.cget("text_color"))
 
     # Entry and buttons for modifying properties
     text_var = tk.StringVar()
