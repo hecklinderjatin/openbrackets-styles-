@@ -1,7 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
 
-
 def add_button_to_frame2(frame2):
     new_button = ctk.CTkButton(frame2, text="New Button")
     new_button.grid()
@@ -12,10 +11,10 @@ def add_button_to_frame5(frame5):
     new_button.grid()
     return new_button  
 
-def add_button(frame2, frame5):
-    button_frame2 = add_button_to_frame2(frame2)
+def add_button(frame2, frame5,widgetlist):
+    widgetlist.append (add_button_to_frame2(frame2))
     button_frame5 = add_button_to_frame5(frame5)
-    return button_frame2, button_frame5
+    return widgetlist;
 
 def add_label_to_frame2(frame2):
     new_label = ctk.CTkLabel(frame2, text="New Label", fg_color="blue")

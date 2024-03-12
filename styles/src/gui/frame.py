@@ -7,9 +7,13 @@ import tkinter.colorchooser as colorchooser
 
 
 def run_gui():
+    
+    widgetlist=[]
     root = ctk.CTk()
     root.geometry("1920x1080")
 
+    
+    
     # Configure row weights
     for i in range(10):  # Adjusted to the number of rows needed
         root.grid_rowconfigure(i, weight=1)
@@ -55,15 +59,34 @@ def run_gui():
     frame5 = ctk.CTkScrollableFrame(root, orientation="vertical", label_text="Elements In Canvas")
     frame5.grid(row=7, column=0, rowspan=10, pady=10, padx=10, sticky="nsew")
 
-    button_add_button = ctk.CTkButton(frame1, text="Add Button", command=lambda:functions.add_button(frame2, frame5))
+    def add_button_to_frame2(frame2):
+        new_button = ctk.CTkButton(frame2, text="New Button")
+        new_button.grid()
+        return new_button  
+
+    def add_button_to_frame5(frame5):
+        new_button = ctk.CTkButton(frame5, text="New Button")
+        new_button.grid()
+        return new_button  
+
+    def add_button(frame2, frame5,widgetlist):
+        widgetlist.append (add_button_to_frame2(frame2))
+        button_frame5 = add_button_to_frame5(frame5)
+        
+        for widget in widgetlist:
+            print(widget.cget("text"))
+        
+    button_add_button = ctk.CTkButton(frame1, text="Add Button", command=lambda:add_button(frame2, frame5,widgetlist))
     button_add_button.pack()
 
-    button_add_label = ctk.CTkButton(frame1, text="Add Label", command=lambda:functions.add_label(frame2, frame5))
+    
+    
+    """button_add_label = ctk.CTkButton(frame1, text="Add Label", command=lambda:add_label(frame2, frame5))
     button_add_label.pack()
 
-    add_button_checkbox = ctk.CTkButton(frame1, text="Add CheckBox", command=lambda:(functions.add_checkbox(frame2, frame5)))
+    add_button_checkbox = ctk.CTkButton(frame1, text="Add CheckBox", command=lambda:add_checkbox(frame2, frame5))
     add_button_checkbox.pack()
-
+    """
     button_f = ctk.CTkButton(frame4, text="Convert to HTML", command=lambda: (html.convert_frame2_details_to_html(frame2), css.convert_frame2_details_to_css(frame2)))
     button_f.pack()
 
@@ -88,6 +111,10 @@ def run_gui():
     text_var = tk.StringVar()
     bg_var = tk.StringVar()
     fg_var = tk.StringVar()
+    
+    
+    
+
 
     property_frame.grid_columnconfigure(0, weight=1, uniform="fixed", pad=0)
     property_frame.grid_columnconfigure(1, weight=3, uniform="fixed", pad=0)
@@ -104,11 +131,13 @@ def run_gui():
     fg_button = ctk.CTkButton(property_frame, text="Foreground Color", command=lambda: open_color_picker_and_update_canvas(fg_var, fg_canvas))
     fg_button.grid(row=2, column=0, columnspan=3, sticky="w")
 
+    """
     button_delete = ctk.CTkButton(frame3, text="Delete Widget", command=delete_widget)
     button_delete.pack(side="left")  # Using pack instead of grid
 
     update_button = ctk.CTkButton(frame3, text="Update Properties", command=update_properties)
     update_button.pack(side="left") 
+    """
 
     root.mainloop()
 
