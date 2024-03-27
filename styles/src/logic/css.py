@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.font as tkfont 
 
 def convert_frame2_details_to_css(frame2):
     css_details = ""  # Initialize CSS details string
@@ -13,16 +14,20 @@ def convert_frame2_details_to_css(frame2):
             css_details += f"    background-color: {child.cget('bg')};\n"
             css_details += f"    color: {child.cget('fg')};\n"
             css_details += f"    /* Button style for {child.cget('text')} */\n"
+
         elif isinstance(child, tk.Label):
             css_details += f"    background-color: {child.cget('bg')};\n"
             css_details += f"    color: {child.cget('fg')};\n"
             css_details += f"    /* Label style for {child.cget('text')} */\n"
+
         elif isinstance(child, tk.Checkbutton):
             css_details += f"    background-color: {child.cget('bg')};\n"
             css_details += f"    color: {child.cget('fg')};\n"
             css_details += f"    /* Checkbox style for {child.cget('text')} */\n"
 
+
         css_details += "}\n\n"  # End of CSS class definition
+
 
     # Save CSS details to a CSS file
     with open("styles.css", "w") as css_file:

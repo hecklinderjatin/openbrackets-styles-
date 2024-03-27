@@ -1,7 +1,8 @@
-from cProfile import label
-from tabnanny import check
 import tkinter as tk
 from tkinter import colorchooser
+from tkinter import ttk
+from tkinter import font  # Import ttk for themed widgets
+
 
 from logic import functions
 from logic import html
@@ -208,19 +209,35 @@ def run_gui():
             variable.set(color)
             canvas.configure(bg=color)
 
+    notebook = ttk.Notebook(frame3)
+    notebook.grid(row=0, column=0, columnspan=4, rowspan=3, sticky="nsew")
+
+    tab1 = ttk.Frame(notebook)
+    notebook.add(tab1, text='Details')
+
+    tab2 = ttk.Frame(notebook)
+    notebook.add(tab2, text='Transform')
+
     # Entry and buttons for modifying properties
     text_var = tk.StringVar()
     bg_var = tk.StringVar()
     fg_var = tk.StringVar()
 
-    tk.Label(frame3, text="Text:").grid(row=0, column=0, columnspan=2, sticky='w')
-    text_entry = tk.Entry(frame3, textvariable=text_var)
-    text_entry.grid(row=0, column=0, columnspan=4, sticky="e")
+    tk.Label(tab1, text="Text:").grid(row=0, column=0, sticky='w')
+    text_entry = tk.Entry(tab1, textvariable=text_var)
+    text_entry.grid(row=0, column=1, sticky="w")
 
-    bg_button = tk.Button(frame3, text="Background Color", command=lambda: open_color_picker_and_update_canvas(bg_var, bg_canvas))
-    bg_button.grid(row=1, column=0, columnspan=3, sticky="w")
+    bg_canvas_tab1 = tk.Canvas(tab1, width=40, height=20, bg="white", highlightthickness=0)
+    bg_canvas_tab1.grid(row=1, column=2, padx=(5, 0), sticky="w")
 
-    fg_button = tk.Button(frame3, text="Foreground Color", command=lambda: open_color_picker_and_update_canvas(fg_var, fg_canvas))
-    fg_button.grid(row=2, column=0, columnspan=3, sticky="w")
+    fg_canvas_tab1 = tk.Canvas(tab1, width=40, height=20, bg="white", highlightthickness=0)
+    fg_canvas_tab1.grid(row=2, column=2, padx=(5, 0), sticky="w")
+
+    bg_button_tab1 = tk.Button(tab1, text="Background Color", command=lambda: open_color_picker_and_update_canvas(bg_var, bg_canvas_tab1))
+    bg_button_tab1.grid(row=1, column=0,columnspan=10, padx=(5, 0), sticky="w")
+
+    fg_button_tab1 = tk.Button(tab1, text="Foreground Color", command=lambda: open_color_picker_and_update_canvas(fg_var, fg_canvas))
+    fg_button_tab1.grid(row=2, column=0,columnspan=10, padx=(5, 0), sticky="w")
+
 
     root.mainloop()

@@ -1,19 +1,7 @@
-.hello {
-    background-color: #947cc5;
-    color: #f7714a;
-    /* Button style for hello */
-}
-
-.dynamic-button-2 {
+.dynamic-button-1 {
     background-color: SystemButtonFace;
     color: SystemButtonText;
-    /* Button style for Dynamic Button 2 */
-}
-
-.hello {
-    background-color: #947cc5;
-    color: #f7714a;
-    /* Button style for hello */
+    /* Button style for Dynamic Button 1 */
 }
 
 .dynamic-label-1 {
@@ -22,9 +10,15 @@
     /* Label style for Dynamic Label 1 */
 }
 
-.hello {
-    background-color: #947cc5;
-    color: #f7714a;
-    /* Label style for hello */
+.dynamic-label-2 {
+    background-color: SystemButtonFace;
+    color: SystemButtonText;
+    /* Label style for Dynamic Label 2 */
+}
+
+.wow {
+    background-color: #944bf5;
+    color: SystemWindowText;
+    /* Checkbox style for wow */
 }
 
