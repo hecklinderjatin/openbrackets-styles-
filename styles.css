@@ -1,30 +1,12 @@
-.hello {
-    background-color: #947cc5;
-    color: #f7714a;
-    /* Button style for hello */
+.hey0{
+    background-color: #c24bf5;
+    color: #ff8042;
+    /* Button style for hey */
 }
 
-.dynamic-button-2 {
-    background-color: SystemButtonFace;
-    color: SystemButtonText;
-    /* Button style for Dynamic Button 2 */
-}
-
-.hello {
-    background-color: #947cc5;
-    color: #f7714a;
-    /* Button style for hello */
-}
-
-.dynamic-label-1 {
-    background-color: SystemButtonFace;
-    color: SystemButtonText;
-    /* Label style for Dynamic Label 1 */
-}
-
-.hello {
-    background-color: #947cc5;
-    color: #f7714a;
-    /* Label style for hello */
+.hey1{
+    background-color: #43fed3;
+    color: #ff8042;
+    /* Button style for hey */
 }
 
