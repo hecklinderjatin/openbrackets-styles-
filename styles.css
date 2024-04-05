@@ -1,24 +1,6 @@
-.dynamic-button-1 {
+.dynamic-button-10{
     background-color: SystemButtonFace;
     color: SystemButtonText;
     /* Button style for Dynamic Button 1 */
-}
-
-.dynamic-label-1 {
-    background-color: SystemButtonFace;
-    color: SystemButtonText;
-    /* Label style for Dynamic Label 1 */
-}
-
-.dynamic-label-2 {
-    background-color: SystemButtonFace;
-    color: SystemButtonText;
-    /* Label style for Dynamic Label 2 */
-}
-
-.wow {
-    background-color: #944bf5;
-    color: SystemWindowText;
-    /* Checkbox style for wow */
 }
 

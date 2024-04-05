@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import colorchooser
 from tkinter import ttk
-from tkinter import font  # Import ttk for themed widgets
+from tkinter import font
+from turtle import title  # Import ttk for themed widgets
 
 
 from logic import functions
@@ -74,6 +75,9 @@ def run_gui():
 
     frame5 = tk.Frame(root, highlightthickness=1, highlightbackground="black")
     frame5.grid(row=7, column=0, rowspan=10, pady=10, padx=10, sticky="nsew")
+
+    frame6 = tk.Frame(root, width=width, height=height, bg='white', highlightthickness=1, highlightbackground="black")
+    frame6.grid(row=1, column=1, padx=10, sticky="nsew")
 
     def delete_buttons(button_index):
         buttons_list[button_index].destroy()
@@ -191,11 +195,16 @@ def run_gui():
     button_add_checkbox = tk.Button(frame1, text="Add Checkbox", command=add_checkbox)
     button_add_checkbox.pack()
 
-    button_f = tk.Button(frame4, text="Convert to HTML", command=lambda: (html.convert_frame2_details_to_html(frame2_inner), css.convert_frame2_details_to_css(frame2_inner)))
+    button_f = tk.Button(frame4, text="Convert to HTML", command=lambda: (html.convert_frame2_details_to_html(frame2_inner,frame6), css.convert_frame2_details_to_css(frame2_inner)))
     button_f.pack()
 
     button_close = tk.Button(frame4, text="Close App", command=root.destroy)
     button_close.pack()
+
+    title_var = tk.StringVar(value="ENTER WEB TITLE HERE")
+
+    title_entry = tk.Entry(frame6, textvariable=title_var)
+    title_entry.grid(row=1, column=1, sticky="nsew")
 
     bg_canvas = tk.Canvas(frame3, width=40, height=20, bg="white", highlightthickness=0)
     bg_canvas.grid(row=1, column=3, padx=(5, 0), sticky="w")
@@ -219,7 +228,7 @@ def run_gui():
     notebook.add(tab2, text='Transform')
 
     # Entry and buttons for modifying properties
-    text_var = tk.StringVar()
+    text_var = tk.StringVar(value="NEW ITEM")
     bg_var = tk.StringVar()
     fg_var = tk.StringVar()
 
