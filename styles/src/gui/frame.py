@@ -2,14 +2,15 @@ import tkinter as tk
 from tkinter import colorchooser
 from tkinter import ttk
 from tkinter import font
-from turtle import title  # Import ttk for themed widgets
-
+from turtle import title
+from xml.dom import IndexSizeErr  # Import ttk for themed widgets
 
 from logic import functions
 from logic import html
 from logic import css
 
 def run_gui():
+
     buttons_list = []  # List to store buttons in frame2
     delete_buttons_list = []
     update_button_propertie =[]
@@ -18,12 +19,9 @@ def run_gui():
     delete_labels_list = []
     update_labels_propertie =[]
 
-
     checkboxes_list = []
     delete_checkboxes_list = []
     update_checkboxes_propertie =[]
-
-
 
     root = tk.Tk()
     root.geometry("1920x1080")
@@ -39,6 +37,9 @@ def run_gui():
 
     frame1 = tk.Frame(root, highlightthickness=1, highlightbackground="black")
     frame1.grid(row=0, column=0, rowspan=10, pady=10, padx=10, sticky="nsew")
+
+    scrollbar_frame1 = tk.Scrollbar(frame1)
+    scrollbar_frame1.pack(side=tk.RIGHT, fill=tk.Y)
 
     height = root.winfo_height()
     width = int(height * (16 / 9))
@@ -75,6 +76,30 @@ def run_gui():
 
     frame5 = tk.Frame(root, highlightthickness=1, highlightbackground="black")
     frame5.grid(row=7, column=0, rowspan=10, pady=10, padx=10, sticky="nsew")
+
+    # Adding scrollbar to frame2
+    scrollbar_frame5 = tk.Scrollbar(frame5)
+    scrollbar_frame5.pack(side=tk.RIGHT, fill=tk.Y)
+
+    canvas_frame5 = tk.Canvas(frame5, highlightthickness=0, yscrollcommand=scrollbar_frame5.set)
+    canvas_frame5.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+    scrollbar_frame5.config(command=canvas_frame5.yview)
+
+    frame5_inner = tk.Frame(canvas_frame5)
+    frame5_inner.grid_columnconfigure(0, weight=1, uniform="fixed")
+
+    canvas_frame5.create_window((0, 0), window=frame5_inner, anchor=tk.NW)
+
+    def configure_frame5(event):
+        canvas_frame5.config(scrollregion=canvas_frame5.bbox("all"))
+
+    frame5_inner.bind("<Configure>", configure_frame5)
+
+    frame7 = tk.Frame(root, highlightthickness=1, highlightbackground="black")
+    frame7.grid(row=10, column=0, rowspan=10, pady=10, padx=10, sticky="nsew")
+    frame7.grid_columnconfigure(0, weight=1, uniform="fixed")
+
 
     frame6 = tk.Frame(root, width=width, height=height, bg='white', highlightthickness=1, highlightbackground="black")
     frame6.grid(row=1, column=1, padx=10, sticky="nsew")
@@ -140,19 +165,18 @@ def run_gui():
         checkboxes_list[checkbox_index].configure(fg=fg_var.get())
 
 
-
     def add_button():
         index = len(buttons_list) + 1
         new_button = tk.Button(frame2_inner, text=f"Dynamic Button {index}")
         new_button.pack()
         buttons_list.append(new_button)
         
-        delete_button_button = tk.Button(frame5,text=f"Delete Button {index}", command=lambda index=index-1: delete_buttons(index))
-        delete_button_button.grid(column=0)
+        delete_button_button = tk.Button(frame5_inner,text=f"Delete Button {index}", command=lambda index=index-1: delete_buttons(index))
+        delete_button_button.grid(column=1,sticky="nsew")
         delete_buttons_list.append(delete_button_button)
 
-        update_button_properties_button = tk.Button(frame5, text=f"Button Properties {index}", command=lambda index=index-1: update_button_properties(index))
-        update_button_properties_button.grid(column=2)
+        update_button_properties_button = tk.Button(frame5_inner, text=f"Button Properties {index}", command=lambda index=index-1: update_button_properties(index))
+        update_button_properties_button.grid(column=0,sticky="nsew")
         update_button_propertie.append(update_button_properties_button)  # Append the update button to the list
 
 
@@ -162,12 +186,12 @@ def run_gui():
         new_label.pack()
         labels_list.append(new_label)
         
-        delete_label_button = tk.Button(frame5, text=f"Delete Label {index}", command=lambda idx=index-1: delete_labels(idx))
-        delete_label_button.grid(column=0)
+        delete_label_button = tk.Button(frame5_inner, text=f"Delete Label {index}", command=lambda idx=index-1: delete_labels(idx))
+        delete_label_button.grid(column=1,sticky="nsew")
         delete_labels_list.append(delete_label_button)
 
-        update_label_properties_button = tk.Button(frame5, text=f"Label Properties {index}", command=lambda index=index-1: update_label_properties(index))
-        update_label_properties_button.grid(column=2)
+        update_label_properties_button = tk.Button(frame5_inner, text=f"Label Properties {index}", command=lambda index=index-1: update_label_properties(index))
+        update_label_properties_button.grid(column=0,sticky="nsew")
         update_labels_propertie.append(update_label_properties_button)  # Append the update button to the list
 
 
@@ -177,12 +201,12 @@ def run_gui():
         new_checkbox.pack()
         checkboxes_list.append(new_checkbox)
         
-        delete_checkbox_button = tk.Button(frame5, text=f"Delete Checkbox {index}", command=lambda idx=index-1: delete_checkboxes(idx))
-        delete_checkbox_button.grid(column=0)
+        delete_checkbox_button = tk.Button(frame5_inner, text=f"Delete Checkbox {index}", command=lambda idx=index-1: delete_checkboxes(idx))
+        delete_checkbox_button.grid(column=1,sticky="nsew")
         delete_checkboxes_list.append(delete_checkbox_button)
 
-        update_checkboxes_properties_button = tk.Button(frame5, text=f"Checkbox Properties {index}", command=lambda index=index-1: update_checkbox_properties(index))
-        update_checkboxes_properties_button.grid(column=2)
+        update_checkboxes_properties_button = tk.Button(frame5_inner, text=f"Checkbox Properties {index}", command=lambda index=index-1: update_checkbox_properties(index))
+        update_checkboxes_properties_button.grid(column=0,sticky="nsew")
         update_checkboxes_propertie.append(update_checkboxes_properties_button)  # Append the update button to the list
 
 
@@ -247,6 +271,90 @@ def run_gui():
 
     fg_button_tab1 = tk.Button(tab1, text="Foreground Color", command=lambda: open_color_picker_and_update_canvas(fg_var, fg_canvas))
     fg_button_tab1.grid(row=2, column=0,columnspan=10, padx=(5, 0), sticky="w")
+
+    delete_last = tk.Button(frame7, text="Delete", command=lambda:delete_last_item(len(frame2_inner.winfo_children()) - 1))
+    delete_last.grid(row=0, column=0,columnspan=10, padx=(5, 0), sticky="w")
+    
+    update_last = tk.Button(frame7, text="Update", command=lambda: update_last_item(len(frame2_inner.winfo_children()) - 1))
+    update_last.grid(row=0, column=2, columnspan=10, padx=(5, 5), sticky="w")
+    
+    def delete_last_item(last_index):
+        # Check if there are any widgets in frame2_inner
+        if frame2_inner.winfo_children():
+            # Get the last widget and destroy it
+            last_widget = frame2_inner.winfo_children()[-1]
+            last_widget.destroy()
+            # Also, remove the associated delete button and update button from their respective lists
+            if isinstance(last_widget, tk.Button):
+                buttons_list[last_index].destroy()
+                delete_buttons_list[last_index].destroy()
+                update_button_propertie[last_index].destroy()
+                # Remove the deleted buttons from the lists
+                del buttons_list[last_index]
+                del delete_buttons_list[last_index]
+                del update_button_propertie[last_index]
+            elif isinstance(last_widget, tk.Label):
+                labels_list[last_index].destroy()
+                delete_labels_list[last_index].destroy()
+                update_labels_propertie[last_index].destroy()
+                # Remove the deleted labels and their associated delete buttons from the lists
+                del labels_list[last_index]
+                del delete_labels_list[last_index]
+                del update_labels_propertie[last_index]
+            elif isinstance(last_widget, tk.Checkbutton):
+                checkboxes_list[last_index].destroy()
+                delete_checkboxes_list[last_index].destroy()
+                update_checkboxes_propertie[last_index].destroy()
+                # Remove the deleted checkboxes and their associated delete buttons from the lists
+                del checkboxes_list[last_index]
+                del delete_checkboxes_list[last_index]
+                del update_checkboxes_propertie[last_index]
+
+    def update_last_item(last_index):
+        # Check if there are any widgets in frame2_inner
+        if frame2_inner.winfo_children():
+            # Get the last widget
+            last_widget = frame2_inner.winfo_children()[-1]
+            # Implement the logic to update properties of the last widget here
+            if isinstance(last_widget, tk.Button):
+                # Get the text from the text box
+                new_text = text_var.get()
+                # Update the text of the button
+                buttons_list[last_index].configure(text=new_text)
+                # Update background color
+                buttons_list[last_index].configure(bg=bg_var.get())
+                # Update foreground color
+                buttons_list[last_index].configure(fg=fg_var.get())
+            elif isinstance(last_widget, tk.Label):
+                # Get the text from the text box
+                new_text = text_var.get()
+                # Update the text of the label
+                labels_list[last_index].configure(text=new_text)
+                # Update background color
+                labels_list[last_index].configure(bg=bg_var.get())
+                # Update foreground color
+                labels_list[last_index].configure(fg=fg_var.get())
+            elif isinstance(last_widget, tk.Checkbutton):
+                # Get the text from the text box
+                new_text = text_var.get()
+                # Update the text of the checkbox
+                checkboxes_list[last_index].configure(text=new_text)
+                # Update background color
+                checkboxes_list[last_index].configure(bg=bg_var.get())
+                # Update foreground color
+                checkboxes_list[last_index].configure(fg=fg_var.get())
+
+            # Also update corresponding buttons in frame5_inner
+            if isinstance(last_widget, (tk.Button, tk.Label, tk.Checkbutton)):
+                update_buttons_in_frame5(last_index)
+
+    def update_buttons_in_frame5(last_index):
+        # Update the properties of corresponding buttons in frame5_inner
+        if len(frame5_inner.winfo_children()) > last_index:
+            update_button = update_buttons_list[last_index]
+            update_button.configure(text=f"Button Properties {last_index + 1}")  # Update text of the button
+            # Associate with the updated update function
+            update_button.configure(command=lambda index=last_index: update_last_item(index))
 
 
     root.mainloop()
