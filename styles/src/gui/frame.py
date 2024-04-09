@@ -251,6 +251,10 @@ def run_gui():
     tab2 = ttk.Frame(notebook)
     notebook.add(tab2, text='Transform')
 
+    
+    tab3 = ttk.Frame(notebook)
+    notebook.add(tab3, text='Header')
+
     # Entry and buttons for modifying properties
     text_var = tk.StringVar(value="NEW ITEM")
     bg_var = tk.StringVar()
