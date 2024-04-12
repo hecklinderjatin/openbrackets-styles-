@@ -1,10 +1,7 @@
 import tkinter as tk
-from tkinter import IntVar, colorchooser
+from tkinter import colorchooser
 from tkinter import ttk
 from tkinter import font
-from turtle import title
-from xml.dom import IndexSizeErr  # Import ttk for themed widgets
-
 from logic import functions
 from logic import html
 from logic import css
@@ -25,6 +22,8 @@ def run_gui():
 
     root = tk.Tk()
     root.geometry("1920x1080")
+    root.title("Styles : Web Builder")
+
     
 
     # Configure row weights
@@ -240,12 +239,14 @@ def run_gui():
         # Update foreground color
         checkboxes_list[checkbox_index].configure(fg=fg_var.get())
         checkboxes_list[checkbox_index].configure(font=(font_var.get(),font_size_var.get()))
+
     def add_button():
         index = len(buttons_list) + 1
         new_button = tk.Button(frame2_inner, text=f"Dynamic Button {index}")
         new_button.bind("<ButtonPress-1>", on_drag_start)
         new_button.bind("<B1-Motion>", on_drag_motion)
         new_button.bind("<ButtonRelease-1>", on_drag_end)
+
         new_button.pack()
         buttons_list.append(new_button)
         
@@ -303,7 +304,7 @@ def run_gui():
     button_add_checkbox = tk.Button(frame1, text="Add Checkbox", command=add_checkbox)
     button_add_checkbox.pack()
 
-    button_f = tk.Button(frame4, text="Convert to HTML", command=lambda: (html.convert_frame2_details_to_html(frame2_inner,frame6), css.convert_frame2_details_to_css(frame2_inner)))
+    button_f = tk.Button(frame4, text="Convert to HTML", command=lambda: (html.convert_frame2_details_to_html(frame2_inner,frame6), css.convert_frame2_details_to_css(frame2_inner,background_var.get())))
     button_f.pack()
 
     button_close = tk.Button(frame4, text="Close App", command=root.destroy)
@@ -311,8 +312,11 @@ def run_gui():
 
     title_var = tk.StringVar(value="ENTER WEB TITLE HERE")
 
-    title_entry = tk.Entry(frame6, textvariable=title_var)
-    title_entry.grid(row=1, column=1, sticky="nsew")
+    title_entry = tk.Entry(frame6,width=50, textvariable=title_var)
+    title_entry.grid(row=0, column=0,padx=10,pady=10, sticky="nsew")
+
+    background = tk.Canvas(frame6, width=40, height=20, bg="white", highlightthickness=0)
+    background.grid(row=1, column=0, padx=(5, 0), sticky="w")
 
     bg_canvas = tk.Canvas(frame3, width=40, height=20, bg="white", highlightthickness=0)
     bg_canvas.grid(row=1, column=3, padx=(5, 0), sticky="w")
@@ -340,6 +344,7 @@ def run_gui():
 
     # Entry and buttons for modifying properties
     text_var = tk.StringVar(value="NEW ITEM")
+    background_var=tk.StringVar(value ="white")
     bg_var = tk.StringVar(value ="black")
     fg_var = tk.StringVar(value = "white")
     inyx_var = tk.StringVar(value="0")
@@ -355,11 +360,17 @@ def run_gui():
     text_entry = tk.Entry(tab1, textvariable=text_var)
     text_entry.grid(row=0, column=1, sticky="w")
 
+    background_canvas = tk.Canvas(frame6, width=40, height=20, bg="white", highlightthickness=0)
+    background_canvas.grid(row=1, column=2, padx=(5, 0), sticky="w")
+
     bg_canvas_tab1 = tk.Canvas(tab1, width=40, height=20, bg="black", highlightthickness=0)
     bg_canvas_tab1.grid(row=1, column=2, padx=(5, 0), sticky="w")
 
     fg_canvas_tab1 = tk.Canvas(tab1, width=40, height=20, bg="white", highlightthickness=0)
     fg_canvas_tab1.grid(row=2, column=2, padx=(5, 0), sticky="w")
+
+    background_button = tk.Button(frame6, text="Page Color", command=lambda: open_color_picker_and_update_canvas(background_var, background_canvas))
+    background_button.grid(row=1, column=0,columnspan=10, padx=(5, 0), sticky="w")
 
     bg_button_tab1 = tk.Button(tab1, text="Background Color", command=lambda: open_color_picker_and_update_canvas(bg_var, bg_canvas_tab1))
     bg_button_tab1.grid(row=1, column=0,columnspan=10, padx=(5, 0), sticky="w")
@@ -438,6 +449,8 @@ def run_gui():
         if frame2_inner.winfo_children():
             # Get the last widget
             last_widget = frame2_inner.winfo_children()[-1]
+
+            frame2_inner.configure(bg=background_var.get())
             # Implement the logic to update properties of the last widget here
             if isinstance(last_widget, tk.Button):
                 # Get the text from the text box
@@ -459,6 +472,8 @@ def run_gui():
                 y = (percentage_y / 100) * frame_height
                 # Place the widget
                 buttons_list[last_index].place(x=x, y=y)
+                buttons_list[last_index].configure(font=(font_var.get(),font_size_var.get()))
+
 
             elif isinstance(last_widget, tk.Label):
                 # Get the text from the text box
@@ -480,6 +495,8 @@ def run_gui():
                 y = (percentage_y / 100) * frame_height
                 # Place the widget
                 labels_list[last_index].place(x=x, y=y)
+                labels_list[last_index].configure(font=(font_var.get(),font_size_var.get()))  # Change 12 to the desired font size
+
 
             elif isinstance(last_widget, tk.Checkbutton):
                 # Get the text from the text box
@@ -501,6 +518,8 @@ def run_gui():
                 y = (percentage_y / 100) * frame_height
                 # Place the widget
                 checkboxes_list[last_index].place(x=x, y=y)
+                checkboxes_list[last_index].configure(font=(font_var.get(),font_size_var.get()))
+
 
             # Also update corresponding buttons in frame5_inner
             if isinstance(last_widget, (tk.Button, tk.Label, tk.Checkbutton)):
