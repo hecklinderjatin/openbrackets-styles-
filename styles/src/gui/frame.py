@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import colorchooser
+from tkinter import IntVar, colorchooser
 from tkinter import ttk
 from tkinter import font
 from turtle import title
@@ -138,6 +138,8 @@ def run_gui():
     frame6 = tk.Frame(root, width=width, height=height, bg='white', highlightthickness=1, highlightbackground="black")
     frame6.grid(row=1, column=1, padx=10, sticky="nsew")
 
+    
+    
     def delete_buttons(button_index):
         buttons_list[button_index].destroy()
         delete_buttons_list[button_index].destroy()
@@ -189,7 +191,7 @@ def run_gui():
         buttons_list[button_index].configure(bg=bg_var.get())
         # Update foreground color
         buttons_list[button_index].configure(fg=fg_var.get())
-
+        buttons_list[button_index].configure(font=(font_var.get(),font_size_var.get()))
 
     def update_label_properties(label_index):
 
@@ -212,6 +214,8 @@ def run_gui():
         labels_list[label_index].configure(bg=bg_var.get())
         # Update foreground color
         labels_list[label_index].configure(fg=fg_var.get())
+        
+        labels_list[label_index].configure(font=(font_var.get(),font_size_var.get()))  # Change 12 to the desired font size
 
 
     def update_checkbox_properties(checkbox_index):
@@ -235,7 +239,7 @@ def run_gui():
         checkboxes_list[checkbox_index].configure(bg=bg_var.get())
         # Update foreground color
         checkboxes_list[checkbox_index].configure(fg=fg_var.get())
-
+        checkboxes_list[checkbox_index].configure(font=(font_var.get(),font_size_var.get()))
     def add_button():
         index = len(buttons_list) + 1
         new_button = tk.Button(frame2_inner, text=f"Dynamic Button {index}")
@@ -341,8 +345,13 @@ def run_gui():
     fg_var = tk.StringVar()
     inyx_var = tk.StringVar(value="0")
     inyy_var = tk.StringVar(value="0")
-
-
+    font_var=tk.StringVar()
+    font_size_var=tk.IntVar()
+    
+    tk.Label(tab1, text="Fontsize:").grid(row=4, column=0, sticky='w')
+    font_entry= tk.Entry(tab1,textvariable=font_size_var)
+    font_entry.grid(row=4, column=1,columnspan=4,sticky="w")
+    
     tk.Label(tab1, text="Text:").grid(row=0, column=0, sticky='w')
     text_entry = tk.Entry(tab1, textvariable=text_var)
     text_entry.grid(row=0, column=1, sticky="w")
@@ -356,7 +365,7 @@ def run_gui():
     bg_button_tab1 = tk.Button(tab1, text="Background Color", command=lambda: open_color_picker_and_update_canvas(bg_var, bg_canvas_tab1))
     bg_button_tab1.grid(row=1, column=0,columnspan=10, padx=(5, 0), sticky="w")
 
-    fg_button_tab1 = tk.Button(tab1, text="Foreground Color", command=lambda: open_color_picker_and_update_canvas(fg_var, fg_canvas))
+    fg_button_tab1 = tk.Button(tab1, text="Foreground Color", command=lambda: open_color_picker_and_update_canvas(fg_var, fg_canvas_tab1))
     fg_button_tab1.grid(row=2, column=0,columnspan=10, padx=(5, 0), sticky="w")
 
     delete_last = tk.Button(frame7, text="Delete", command=lambda:delete_last_item(len(frame2_inner.winfo_children()) - 1))
@@ -372,6 +381,26 @@ def run_gui():
     tk.Label(tab2, text="Y Position:-").grid(row=1, column=0, sticky='w')
     x_entry = tk.Entry(tab2, textvariable=inyy_var)
     x_entry.grid(row=1, column=1, sticky="w")
+    
+    
+    
+    """def on_select(*args):
+        selected_item = selected_item_var.get()"""
+        
+    #code for the font chooser in gui
+    
+    fontlist=[]
+    for f in font.families():
+        fontlist.append(f)
+    tk.Label(tab1, text="Font:").grid(row=3, column=0, sticky='w')
+    font_var.set(fontlist[0])
+    font_listbox = tk.OptionMenu(tab1,font_var,*fontlist)
+    font_listbox.grid(row=3, column=1, padx=(5, 0), sticky="w")
+    
+    tk.Label(tab1, text="Fontsize:").grid(row=4, column=0, sticky='w')
+    
+
+    
     
     def delete_last_item(last_index):
         # Check if there are any widgets in frame2_inner
