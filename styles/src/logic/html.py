@@ -26,18 +26,17 @@ def convert_frame2_details_to_html(frame2, frame6):
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <h1>User Input</h1>
     """
 
     i = 0
-    for child in children:
+    for child in frame2.winfo_children():
         if isinstance(child, tk.Button):
             html_details += f"<button class='{child.cget('text').lower().replace(" ", "-")}{i}'>{child.cget('text')}</button><br>\n"
         elif isinstance(child, tk.Label):
             html_details += f"<label class='{child.cget('text').lower().replace(" ", "-")}{i}'>{child.cget('text')}</label><br>\n"
         elif isinstance(child, tk.Checkbutton):
             html_details += f"""<input type="checkbox" class='{child.cget('text').lower().replace(" ", "-")}{i}'>
-  <label class='{child.cget('text').lower().replace(" ", "-")}{i}'>{child.cget('text')}</label><br>\n"""
+            <label class='{child.cget('text').lower().replace(" ", "-")}{i}'>{child.cget('text')}</label><br>\n"""
         i += 1
     html_details += "\n</body>\n</html>"
 
