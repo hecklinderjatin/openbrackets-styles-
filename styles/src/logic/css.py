@@ -14,17 +14,25 @@ def convert_frame2_details_to_css(frame3):
             css_details += f"    background-color: {child.cget('bg')};\n"
             css_details += f"    color: {child.cget('fg')};\n"
             css_details += f"    /* Button style for {child.cget('text')} */\n"
+            css_details += f"    position: absolute;\n"
+            css_details += f"    left:{child.winfo_x()}%;\n"
+            css_details += f"    top:{child.winfo_y()}%;\n"
 
         elif isinstance(child, tk.Label):
             css_details += f"    background-color: {child.cget('bg')};\n"
             css_details += f"    color: {child.cget('fg')};\n"
             css_details += f"    /* Label style for {child.cget('text')} */\n"
+            css_details += f"    position: absolute;\n"
+            css_details += f"    left:{child.winfo_x()}%;\n"
+            css_details += f"    top:{child.winfo_y()}%;\n"
 
         elif isinstance(child, tk.Checkbutton):
             css_details += f"    background-color: {child.cget('bg')};\n"
             css_details += f"    color: {child.cget('fg')};\n"
             css_details += f"    /* Checkbox style for {child.cget('text')} */\n"
-
+            css_details += f"    position: absolute;\n"
+            css_details += f"    left:{child.winfo_x()}%\n"
+            css_details += f"    top:{child.winfo_y()}%;\n"
 
         css_details += "}\n\n"  # End of CSS class definition
 

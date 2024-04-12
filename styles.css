@@ -1,0 +1,9 @@
+.new-item0{
+    background-color: SystemButtonFace;
+    color: SystemButtonText;
+    /* Button style for NEW ITEM */
+    position: absolute;
+    left:388%;
+    top:113%;
+}
+

@@ -25,6 +25,7 @@ def run_gui():
 
     root = tk.Tk()
     root.geometry("1920x1080")
+    
 
     # Configure row weights
     for i in range(10):
@@ -35,24 +36,59 @@ def run_gui():
     root.grid_columnconfigure(1, weight=3, uniform="fixed")
     root.grid_columnconfigure(2, weight=1, uniform="fixed")
 
+    def on_drag_start(event):
+        widget = event.widget
+        widget.startX = event.x
+        widget.startY = event.y
+
+    def on_drag_motion(event):
+        widget = event.widget
+        x = widget.winfo_x() - widget.startX + event.x
+        y = widget.winfo_y() - widget.startY + event.y
+
+        # Limit the movement to within the boundaries of frame2
+        max_x = frame2_inner.winfo_width() - widget.winfo_width()
+        max_y = frame2_inner.winfo_height() - widget.winfo_height()
+        x = min(max(x, 0), max_x)
+        y = min(max(y, 0), max_y)
+
+        widget.place(x=x, y=y)
+
+        inyx_var.set(str(x))
+        inyy_var.set(str(y))
+
+        # Calculate percentage position
+        frame_width = frame2_inner.winfo_width()
+        frame_height = frame2_inner.winfo_height()
+        percentage_x = (x / frame_width) * 100
+        percentage_y = (y / frame_height) * 100
+
+        # Update text box with percentage values
+        inyx_var.set(f"{percentage_x:.2f}%")
+        inyy_var.set(f"{percentage_y:.2f}%")
+
+
+    def on_drag_end(event):
+        pass
+
     frame1 = tk.Frame(root, highlightthickness=1, highlightbackground="black")
     frame1.grid(row=0, column=0, rowspan=10, pady=10, padx=10, sticky="nsew")
 
     scrollbar_frame1 = tk.Scrollbar(frame1)
     scrollbar_frame1.pack(side=tk.RIGHT, fill=tk.Y)
 
-    height = root.winfo_height()
+    height = 720
     width = int(height * (16 / 9))
 
     frame2 = tk.Frame(root, width=width, height=height, bg='white', highlightthickness=1, highlightbackground="black")
-    frame2.grid(row=2, column=1, rowspan=6, pady=10, padx=10, sticky="nsew")
+    frame2.grid(row=2, column=1,rowspan=6, pady=10, padx=10, sticky="nsew")
 
     # Adding scrollbar to frame2
     scrollbar_frame2 = tk.Scrollbar(frame2)
     scrollbar_frame2.pack(side=tk.RIGHT, fill=tk.Y)
 
     canvas_frame2 = tk.Canvas(frame2, bg='white', highlightthickness=0, yscrollcommand=scrollbar_frame2.set)
-    canvas_frame2.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+    canvas_frame2.pack(fill=tk.BOTH, expand=True)
 
     scrollbar_frame2.config(command=canvas_frame2.yview)
 
@@ -64,20 +100,18 @@ def run_gui():
 
     frame2_inner.bind("<Configure>", configure_canvas)
 
+    frame2_inner.pack(fill=tk.BOTH, expand=True)
+
     frame3 = tk.Frame(root, highlightthickness=1, highlightbackground="black")
     frame3.grid(row=1, column=2, columnspan=1, rowspan=10, pady=10, padx=10, sticky="nsew")
 
     frame4 = tk.Frame(root, highlightthickness=1, highlightbackground="black")
     frame4.grid(row=0, column=2, rowspan=1, pady=10, padx=10, sticky="nsew")
 
-    for i in range(10):
-        frame2.grid_rowconfigure(i, weight=1)
-        frame2.grid_columnconfigure(i, weight=1, uniform="fixed")
-
     frame5 = tk.Frame(root, highlightthickness=1, highlightbackground="black")
     frame5.grid(row=7, column=0, rowspan=10, pady=10, padx=10, sticky="nsew")
 
-    # Adding scrollbar to frame2
+    # Adding scrollbar to frame5
     scrollbar_frame5 = tk.Scrollbar(frame5)
     scrollbar_frame5.pack(side=tk.RIGHT, fill=tk.Y)
 
@@ -135,6 +169,18 @@ def run_gui():
 
 
     def update_button_properties(button_index):
+
+        # Get position in percentage from user input
+        percentage_x = float(inyx_var.get().strip("%"))
+        percentage_y = float(inyy_var.get().strip("%"))
+        # Convert percentage values to pixels
+        frame_width = frame2_inner.winfo_width()
+        frame_height = frame2_inner.winfo_height()
+        x = (percentage_x / 100) * frame_width
+        y = (percentage_y / 100) * frame_height
+        # Place the widget
+        buttons_list[button_index].place(x=x, y=y)
+
         # Get the text from the text box
         new_text = text_var.get()
         # Update the text of the button
@@ -144,7 +190,20 @@ def run_gui():
         # Update foreground color
         buttons_list[button_index].configure(fg=fg_var.get())
 
+
     def update_label_properties(label_index):
+
+        # Get position in percentage from user input
+        percentage_x = float(inyx_var.get().strip("%"))
+        percentage_y = float(inyy_var.get().strip("%"))
+        # Convert percentage values to pixels
+        frame_width = frame2_inner.winfo_width()
+        frame_height = frame2_inner.winfo_height()
+        x = (percentage_x / 100) * frame_width
+        y = (percentage_y / 100) * frame_height
+        # Place the widget
+        labels_list[label_index].place(x=x, y=y)
+
         # Get the text from the text box
         new_text = text_var.get()
         # Update the text of the label
@@ -154,7 +213,20 @@ def run_gui():
         # Update foreground color
         labels_list[label_index].configure(fg=fg_var.get())
 
+
     def update_checkbox_properties(checkbox_index):
+
+        # Get position in percentage from user input
+        percentage_x = float(inyx_var.get().strip("%"))
+        percentage_y = float(inyy_var.get().strip("%"))
+        # Convert percentage values to pixels
+        frame_width = frame2_inner.winfo_width()
+        frame_height = frame2_inner.winfo_height()
+        x = (percentage_x / 100) * frame_width
+        y = (percentage_y / 100) * frame_height
+        # Place the widget
+        checkboxes_list[checkbox_index].place(x=x, y=y)
+
         # Get the text from the text box
         new_text = text_var.get()
         # Update the text of the checkbox
@@ -164,10 +236,12 @@ def run_gui():
         # Update foreground color
         checkboxes_list[checkbox_index].configure(fg=fg_var.get())
 
-
     def add_button():
         index = len(buttons_list) + 1
         new_button = tk.Button(frame2_inner, text=f"Dynamic Button {index}")
+        new_button.bind("<ButtonPress-1>", on_drag_start)
+        new_button.bind("<B1-Motion>", on_drag_motion)
+        new_button.bind("<ButtonRelease-1>", on_drag_end)
         new_button.pack()
         buttons_list.append(new_button)
         
@@ -183,10 +257,13 @@ def run_gui():
     def add_label():
         index = len(labels_list) + 1
         new_label = tk.Label(frame2_inner, text=f"Dynamic Label {index}")
+        new_label.bind("<ButtonPress-1>", on_drag_start)
+        new_label.bind("<B1-Motion>", on_drag_motion)
+        new_label.bind("<ButtonRelease-1>", on_drag_end)
         new_label.pack()
         labels_list.append(new_label)
         
-        delete_label_button = tk.Button(frame5_inner, text=f"Delete Label {index}", command=lambda idx=index-1: delete_labels(idx))
+        delete_label_button = tk.Button(frame5_inner, text=f"Delete Label {index}", command=lambda index=index-1: delete_labels(index))
         delete_label_button.grid(column=1,sticky="nsew")
         delete_labels_list.append(delete_label_button)
 
@@ -198,10 +275,13 @@ def run_gui():
     def add_checkbox():
         index = len(checkboxes_list) + 1
         new_checkbox = tk.Checkbutton(frame2_inner, text=f"Dynamic Checkbox {index}")
+        new_checkbox.bind("<ButtonPress-1>", on_drag_start)
+        new_checkbox.bind("<B1-Motion>", on_drag_motion)
+        new_checkbox.bind("<ButtonRelease-1>", on_drag_end)
         new_checkbox.pack()
         checkboxes_list.append(new_checkbox)
         
-        delete_checkbox_button = tk.Button(frame5_inner, text=f"Delete Checkbox {index}", command=lambda idx=index-1: delete_checkboxes(idx))
+        delete_checkbox_button = tk.Button(frame5_inner, text=f"Delete Checkbox {index}", command=lambda index=index-1: delete_checkboxes(index))
         delete_checkbox_button.grid(column=1,sticky="nsew")
         delete_checkboxes_list.append(delete_checkbox_button)
 
@@ -259,6 +339,9 @@ def run_gui():
     text_var = tk.StringVar(value="NEW ITEM")
     bg_var = tk.StringVar()
     fg_var = tk.StringVar()
+    inyx_var = tk.StringVar(value="0")
+    inyy_var = tk.StringVar(value="0")
+
 
     tk.Label(tab1, text="Text:").grid(row=0, column=0, sticky='w')
     text_entry = tk.Entry(tab1, textvariable=text_var)
@@ -281,6 +364,14 @@ def run_gui():
     
     update_last = tk.Button(frame7, text="Update", command=lambda: update_last_item(len(frame2_inner.winfo_children()) - 1))
     update_last.grid(row=0, column=2, columnspan=10, padx=(5, 5), sticky="w")
+
+    tk.Label(tab2, text="X Position:-").grid(row=0, column=0, sticky='w')
+    x_entry = tk.Entry(tab2, textvariable=inyx_var)
+    x_entry.grid(row=0, column=1, sticky="w")
+
+    tk.Label(tab2, text="Y Position:-").grid(row=1, column=0, sticky='w')
+    x_entry = tk.Entry(tab2, textvariable=inyy_var)
+    x_entry.grid(row=1, column=1, sticky="w")
     
     def delete_last_item(last_index):
         # Check if there are any widgets in frame2_inner
@@ -329,6 +420,18 @@ def run_gui():
                 buttons_list[last_index].configure(bg=bg_var.get())
                 # Update foreground color
                 buttons_list[last_index].configure(fg=fg_var.get())
+
+                # Get position in percentage from user input
+                percentage_x = float(inyx_var.get().strip("%"))
+                percentage_y = float(inyy_var.get().strip("%"))
+                # Convert percentage values to pixels
+                frame_width = frame2_inner.winfo_width()
+                frame_height = frame2_inner.winfo_height()
+                x = (percentage_x / 100) * frame_width
+                y = (percentage_y / 100) * frame_height
+                # Place the widget
+                buttons_list[last_index].place(x=x, y=y)
+
             elif isinstance(last_widget, tk.Label):
                 # Get the text from the text box
                 new_text = text_var.get()
@@ -338,6 +441,18 @@ def run_gui():
                 labels_list[last_index].configure(bg=bg_var.get())
                 # Update foreground color
                 labels_list[last_index].configure(fg=fg_var.get())
+
+                # Get position in percentage from user input
+                percentage_x = float(inyx_var.get().strip("%"))
+                percentage_y = float(inyy_var.get().strip("%"))
+                # Convert percentage values to pixels
+                frame_width = frame2_inner.winfo_width()
+                frame_height = frame2_inner.winfo_height()
+                x = (percentage_x / 100) * frame_width
+                y = (percentage_y / 100) * frame_height
+                # Place the widget
+                labels_list[last_index].place(x=x, y=y)
+
             elif isinstance(last_widget, tk.Checkbutton):
                 # Get the text from the text box
                 new_text = text_var.get()
@@ -348,6 +463,17 @@ def run_gui():
                 # Update foreground color
                 checkboxes_list[last_index].configure(fg=fg_var.get())
 
+                # Get position in percentage from user input
+                percentage_x = float(inyx_var.get().strip("%"))
+                percentage_y = float(inyy_var.get().strip("%"))
+                # Convert percentage values to pixels
+                frame_width = frame2_inner.winfo_width()
+                frame_height = frame2_inner.winfo_height()
+                x = (percentage_x / 100) * frame_width
+                y = (percentage_y / 100) * frame_height
+                # Place the widget
+                checkboxes_list[last_index].place(x=x, y=y)
+
             # Also update corresponding buttons in frame5_inner
             if isinstance(last_widget, (tk.Button, tk.Label, tk.Checkbutton)):
                 update_buttons_in_frame5(last_index)
@@ -355,10 +481,12 @@ def run_gui():
     def update_buttons_in_frame5(last_index):
         # Update the properties of corresponding buttons in frame5_inner
         if len(frame5_inner.winfo_children()) > last_index:
-            update_button = update_buttons_list[last_index]
+            update_button = update_button_propertie[last_index]
             update_button.configure(text=f"Button Properties {last_index + 1}")  # Update text of the button
             # Associate with the updated update function
             update_button.configure(command=lambda index=last_index: update_last_item(index))
+
+
 
 
     root.mainloop()
