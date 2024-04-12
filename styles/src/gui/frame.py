@@ -255,7 +255,7 @@ def run_gui():
 
         update_button_properties_button = tk.Button(frame5_inner, text=f"Button Properties {index}", command=lambda index=index-1: update_button_properties(index))
         update_button_properties_button.grid(column=0,sticky="nsew")
-        update_button_propertie.append(update_button_properties_button)  # Append the update button to the list
+        update_button_propertie.append(update_button_properties_button) 
 
 
     def add_label():
@@ -335,14 +335,13 @@ def run_gui():
     tab2 = ttk.Frame(notebook)
     notebook.add(tab2, text='Transform')
 
-    
     tab3 = ttk.Frame(notebook)
     notebook.add(tab3, text='Header')
 
     # Entry and buttons for modifying properties
     text_var = tk.StringVar(value="NEW ITEM")
-    bg_var = tk.StringVar()
-    fg_var = tk.StringVar()
+    bg_var = tk.StringVar(value ="black")
+    fg_var = tk.StringVar(value = "white")
     inyx_var = tk.StringVar(value="0")
     inyy_var = tk.StringVar(value="0")
     font_var=tk.StringVar()
@@ -356,7 +355,7 @@ def run_gui():
     text_entry = tk.Entry(tab1, textvariable=text_var)
     text_entry.grid(row=0, column=1, sticky="w")
 
-    bg_canvas_tab1 = tk.Canvas(tab1, width=40, height=20, bg="white", highlightthickness=0)
+    bg_canvas_tab1 = tk.Canvas(tab1, width=40, height=20, bg="black", highlightthickness=0)
     bg_canvas_tab1.grid(row=1, column=2, padx=(5, 0), sticky="w")
 
     fg_canvas_tab1 = tk.Canvas(tab1, width=40, height=20, bg="white", highlightthickness=0)

@@ -26,7 +26,6 @@ def convert_frame2_details_to_html(frame2, frame6):
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <h1>User Input</h1>
     """
 
     i = 0

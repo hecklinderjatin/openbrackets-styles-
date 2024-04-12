@@ -15,8 +15,13 @@ def convert_frame2_details_to_css(frame3):
             css_details += f"    color: {child.cget('fg')};\n"
             css_details += f"    /* Button style for {child.cget('text')} */\n"
             css_details += f"    position: absolute;\n"
-            css_details += f"    left:{child.winfo_x()}%;\n"
-            css_details += f"    top:{child.winfo_y()}%;\n"
+            css_details += f"    left:{child.winfo_x()/10}%;\n"
+            css_details += f"    top:{child.winfo_y()/10}%;\n"
+            css_details += f"    font-size: {child.winfo_height()}px;\n"  
+            font_family = child.cget('font').split(' ')[0]
+            css_details += f"    font-family: {font_family};\n"
+
+
 
         elif isinstance(child, tk.Label):
             css_details += f"    background-color: {child.cget('bg')};\n"
