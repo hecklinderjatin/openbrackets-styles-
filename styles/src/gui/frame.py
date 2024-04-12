@@ -5,6 +5,9 @@ from tkinter import font
 from logic import functions
 from logic import html
 from logic import css
+from tkinter import filedialog
+from PIL import Image, ImageTk
+
 
 def run_gui():
 
@@ -70,6 +73,27 @@ def run_gui():
     def on_drag_end(event):
         pass
 
+    def open_image():
+        file_path = filedialog.askopenfilename()
+        if file_path:
+            display_image(file_path)
+
+    def display_image(file_path):
+        # Open the image file
+        image = Image.open(file_path)
+
+        # Resize the image to fit the dimensions of picbox
+        width, height = picbox.winfo_width(), picbox.winfo_height()
+        image = image.resize((width, height), Image.LANCZOS)
+
+        # Convert the resized image to PhotoImage
+        photo = ImageTk.PhotoImage(image)
+
+        # Update the picbox with the resized image
+        picbox.config(image=photo)
+        picbox.image = photo
+
+
     frame1 = tk.Frame(root, highlightthickness=1, highlightbackground="black")
     frame1.grid(row=0, column=0, rowspan=10, pady=10, padx=10, sticky="nsew")
 
@@ -100,6 +124,12 @@ def run_gui():
     frame2_inner.bind("<Configure>", configure_canvas)
 
     frame2_inner.pack(fill=tk.BOTH, expand=True)
+
+    image_label = tk.Label(frame2_inner)
+    image_label.bind("<ButtonPress-1>", on_drag_start)
+    image_label.bind("<B1-Motion>", on_drag_motion)
+    image_label.bind("<ButtonRelease-1>", on_drag_end)
+    image_label.pack()
 
     frame3 = tk.Frame(root, highlightthickness=1, highlightbackground="black")
     frame3.grid(row=1, column=2, columnspan=1, rowspan=10, pady=10, padx=10, sticky="nsew")
@@ -318,6 +348,13 @@ def run_gui():
     background = tk.Canvas(frame6, width=40, height=20, bg="white", highlightthickness=0)
     background.grid(row=1, column=0, padx=(5, 0), sticky="w")
 
+    open_button = tk.Button(frame6, text="Open Image", command=open_image)
+    open_button.grid(row=2, column=0, padx=(5, 0), sticky="w")
+
+    # Create a label widget to display the image
+    picbox = tk.Label(frame6,width=18,height=12)
+    picbox.grid(row=2, column=1, padx=(5, 0), sticky="w")
+
     bg_canvas = tk.Canvas(frame3, width=40, height=20, bg="white", highlightthickness=0)
     bg_canvas.grid(row=1, column=3, padx=(5, 0), sticky="w")
 
@@ -451,6 +488,7 @@ def run_gui():
             last_widget = frame2_inner.winfo_children()[-1]
 
             frame2_inner.configure(bg=background_var.get())
+            image_label.configure(image=picbox.cget('image'))
             # Implement the logic to update properties of the last widget here
             if isinstance(last_widget, tk.Button):
                 # Get the text from the text box
