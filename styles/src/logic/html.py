@@ -1,7 +1,6 @@
 import tkinter as tk
 
 def convert_frame2_details_to_html(frame2, frame6):
-    children = frame2.winfo_children() + frame6.winfo_children() 
     
     html_details = f"""
     <!DOCTYPE html>
