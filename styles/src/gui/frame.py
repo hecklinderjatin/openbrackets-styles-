@@ -289,6 +289,38 @@ def run_gui():
         update_checkboxes_properties_button.grid(column=0,sticky="nsew")
         update_checkboxes_propertie.append(update_checkboxes_properties_button)  # Append the update button to the list
 
+    header_frame=tk.Frame(frame2_inner)
+
+    def add_header():
+        
+       
+        header_frame.grid_columnconfigure(0, weight=1)
+        header_frame.grid_columnconfigure(1, weight=1)
+        header_frame.grid_columnconfigure(2, weight=1)
+        header_frame.grid_columnconfigure(3, weight=1)
+
+        label1 = tk.Label(header_frame, text="jobs",font=("Helvetica", 24),anchor="center", bg="purple")
+        label2 = tk.Label(header_frame, text="Column 2",font=("Helvetica", 24), anchor="center")
+        label3 = tk.Label(header_frame, text="Column 3",font=("Helvetica", 24), anchor="center")
+        label4 = tk.Label(header_frame, text="Column 4",font=("Helvetica", 24), anchor="center")
+        
+            
+        label1.grid(row=0, column=0, sticky="nsew")
+        label2.grid(row=0, column=1, sticky="nsew")
+        label3.grid(row=0, column=2, sticky="nsew")
+        label4.grid(row=0, column=3, sticky="nsew")
+        header_frame.pack(fill="both")   
+
+    def modify_header(lst):
+         header_frame.destroy()
+         
+         frame=tk.Frame(frame2_inner)
+
+         n=len(lst)
+         for i in range(n):
+            frame.grid_columnconfigure(i, weight=1)
+         for i in range(n):
+           tk.Label(frame, text=lst[i],font=("Helvetica", 24), anchor="center").grid(row=0, column=i, sticky="nsew")
 
     button_add_button = tk.Button(frame1, text="Add Button", command=add_button)
     button_add_button.pack()
@@ -298,6 +330,9 @@ def run_gui():
 
     button_add_checkbox = tk.Button(frame1, text="Add Checkbox", command=add_checkbox)
     button_add_checkbox.pack()
+
+    button_add_header = tk.Button(frame1, text="Header", command=add_header)
+    button_add_header.pack()
 
     button_f = tk.Button(frame4, text="Convert to HTML", command=lambda: (html.convert_frame2_details_to_html(frame2_inner,frame6), css.convert_frame2_details_to_css(frame2_inner)))
     button_f.pack()
@@ -334,6 +369,8 @@ def run_gui():
     
     tab3 = ttk.Frame(notebook)
     notebook.add(tab3, text='Header')
+
+
 
     # Entry and buttons for modifying properties
     text_var = tk.StringVar(value="NEW ITEM")
@@ -372,6 +409,33 @@ def run_gui():
     tk.Label(tab2, text="Y Position:-").grid(row=1, column=0, sticky='w')
     x_entry = tk.Entry(tab2, textvariable=inyy_var)
     x_entry.grid(row=1, column=1, sticky="w")
+
+    
+    def update_entries():
+        for entry in entry_list:
+            entry.grid_forget()
+        # Get the new count
+        new_count = count.get()
+        
+        # Create new entries
+        for i in range(new_count):
+            entry = tk.Entry(tab3)
+            entry.grid(row=i+2, column=0, sticky="w")
+            entry_list.append(entry)
+        tk.Button(tab3, text="reflect", command=lambda: modify_header(entry_list)).grid(row=new_count+1, column=0, columnspan=2)
+   
+    count = tk.IntVar(value=0)
+    entry_list = []
+
+    tk.Label(tab3, text="Number:").grid(row=0, column=0, sticky='w')
+    x_entry = tk.Entry(tab3, textvariable=count)
+    x_entry.grid(row=0, column=1, sticky="w")
+
+    update_btn = tk.Button(tab3, text="Update Entries", command=update_entries)
+    update_btn.grid(row=1, column=0, columnspan=2)
+
+
+   
     
     def delete_last_item(last_index):
         # Check if there are any widgets in frame2_inner
