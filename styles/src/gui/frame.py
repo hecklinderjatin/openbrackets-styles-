@@ -2,11 +2,15 @@ import tkinter as tk
 from tkinter import colorchooser
 from tkinter import ttk
 from tkinter import font
-from logic import functions
 from logic import html
 from logic import css
 from tkinter import filedialog
 from PIL import Image, ImageTk
+import os
+import shutil
+
+saved_image_path = ""
+saved_image_path2 = ""
 
 
 def run_gui():
@@ -22,6 +26,10 @@ def run_gui():
     checkboxes_list = []
     delete_checkboxes_list = []
     update_checkboxes_propertie =[]
+
+    image_list=[]
+    delete_image_list=[]
+    update_image_list=[]
 
     root = tk.Tk()
     root.geometry("1920x1080")
@@ -73,24 +81,51 @@ def run_gui():
     def on_drag_end(event):
         pass
 
+    file_path = ""  # Define file_path as a global variable outside any function
+    file_path1 = ""  # Define file_path as a global variable outside any function
+
+
     def open_image():
+        global file_path  # Use the global keyword to access the global file_path variable
         file_path = filedialog.askopenfilename()
         if file_path:
+            # Display the image
             display_image(file_path)
+            # Save the image to the file folder
+            save_image(file_path)
 
+    def save_image(file_path):
+        global saved_image_path
+        directory = "E:\\openbrackets-styles-\\"
+        os.makedirs(directory, exist_ok=True)
+        file_name = os.path.basename(file_path)
+        destination = os.path.join(directory, file_name)
+        try:
+            shutil.copyfile(file_path, destination)
+            # Update the global variable with the saved image path
+            saved_image_path = file_name
+            destination.replace("\\", "/")  # Print the file path in the desired format
+            return destination  # Return the destination path
+        except Exception as e:
+            print("Error saving the image:", e)
+            return ""  # Return an empty string if there's an error
+
+        
     def display_image(file_path):
-        # Open the image file
-        image = Image.open(file_path)
-
-        # Resize the image to fit the dimensions of picbox
-        width, height = picbox.winfo_width(), picbox.winfo_height()
-        image = image.resize((width, height), Image.LANCZOS)
-
-        # Convert the resized image to PhotoImage
-        photo = ImageTk.PhotoImage(image)
-
-        # Update the picbox with the resized image
-        picbox.config(image=photo)
+        nonlocal picbox
+        try:
+            # Open the image file
+            image = Image.open(file_path)
+            # Resize the image to fit the dimensions of picbox
+            width, height = picbox.winfo_width(), picbox.winfo_height()
+            image = image.resize((width, height), Image.LANCZOS)
+            # Convert the resized image to PhotoImage
+            photo = ImageTk.PhotoImage(image)
+            # Update the picbox with the resized image
+            picbox.config(image=photo)
+            picbox.image = photo  # Keep a reference to avoid garbage collection
+        except Exception as e:
+            print("Error opening or displaying image:", e)
 
     frame1 = tk.Frame(root, highlightthickness=1, highlightbackground="black")
     frame1.grid(row=0, column=0, rowspan=10, pady=10, padx=10, sticky="nsew")
@@ -117,7 +152,7 @@ def run_gui():
     canvas_frame2.create_window((0, 0), window=frame2_inner, anchor=tk.NW)
 
     # Create a label widget to display the image
-    image_label = tk.Label(frame2_inner)
+    image_label = tk.Label(frame2_inner,width=width, height =height)
     image_label.pack()
 
 
@@ -195,6 +230,22 @@ def run_gui():
         del delete_checkboxes_list[checkbox_index]
         del update_checkboxes_propertie[checkbox_index]
 
+    def delete_image(image_index):
+        # Check if the image index is valid
+        if 0 <= image_index < len(image_list):
+            # Destroy the image widget
+            image_list[image_index].destroy()
+            
+            # Destroy the associated delete button
+            delete_image_list[image_index].destroy()
+            
+            # Destroy the associated update button
+            update_image_list[image_index].destroy()
+
+            # Remove the deleted image and its associated buttons from the lists
+            del image_list[image_index]
+            del delete_image_list[image_index]
+            del update_image_list[image_index]
 
     def update_button_properties(button_index):
 
@@ -267,6 +318,37 @@ def run_gui():
         checkboxes_list[checkbox_index].configure(fg=fg_var.get())
         checkboxes_list[checkbox_index].configure(font=(font_var.get(),font_size_var.get()))
 
+    def update_image_properties(image_index):
+        try:
+            # Get position in percentage from user input
+            percentage_x = float(inyx_var.get().strip("%"))
+            percentage_y = float(inyy_var.get().strip("%"))
+            # Convert percentage values to pixels
+            frame_width = frame2_inner.winfo_width()
+            frame_height = frame2_inner.winfo_height()
+            x = (percentage_x / 100) * frame_width
+            y = (percentage_y / 100) * frame_height
+            # Place the widget
+            image_list[image_index].place(x=x, y=y)
+
+            # Get the new width and height from the entry fields
+            new_width = int(img_width.get())
+            new_height = int(img_height.get())
+
+            # Open the image file
+            image = Image.open(saved_image_path2)
+            # Resize the image to the new dimensions
+            resized_image = image.resize((new_width, new_height), Image.LANCZOS)
+            # Convert the resized image to PhotoImage
+            photo = ImageTk.PhotoImage(resized_image)
+            # Update the image label with the resized image
+            image_list[image_index].config(image=photo)
+            image_list[image_index].image = photo  # Keep a reference to avoid garbage collection
+
+        except Exception as e:
+            print("Error updating image properties:", e)
+
+
     def add_button():
         index = len(buttons_list) + 1
         new_button = tk.Button(frame2_inner, text=f"Dynamic Button {index}")
@@ -321,6 +403,71 @@ def run_gui():
         update_checkboxes_properties_button.grid(column=0,sticky="nsew")
         update_checkboxes_propertie.append(update_checkboxes_properties_button)  # Append the update button to the list
 
+
+    def add_image():   
+        global file_path1  # Use the global keyword to access the global file_path variable
+        # Ask the user to select an image file
+        file_path1 = filedialog.askopenfilename()
+        
+        if file_path1:
+            global saved_image_path2
+            # Display the image
+            display_image_frame2(file_path1)
+            # Save the image to the file folder
+            save_new_image(file_path1)
+            # Add delete and update buttons for the image
+
+    def save_new_image(file_path1):
+        global saved_image_path2
+        directory = "E:\\openbrackets-styles-\\"
+        os.makedirs(directory, exist_ok=True)
+        file_name1 = os.path.basename(file_path1)
+        destination = os.path.join(directory, file_name1)
+        try:
+            shutil.copyfile(file_path1, destination)
+            # Update the global variable with the saved image path
+            saved_image_path2 = file_name1
+            destination.replace("\\", "/")  # Print the file path in the desired format
+            return destination  # Return the destination path
+        except Exception as e:
+            print("Error saving the image:", e)
+            return ""  # Return an empty string if there's an error
+
+    def display_image_frame2(file_path1):
+
+        index = len(image_list) + 1
+        pic2box = tk.Label(frame2_inner)
+        pic2box.bind("<ButtonPress-1>", on_drag_start)
+        pic2box.bind("<B1-Motion>", on_drag_motion)
+        pic2box.bind("<ButtonRelease-1>", on_drag_end)
+        pic2box.pack() 
+        image_list.append(pic2box)   
+
+        try:
+            # Open the image file
+            image = Image.open(file_path1)
+            # Resize the image to fit the dimensions of picbox
+            width, height = pic2box.winfo_width(), pic2box.winfo_height()
+            image = image.resize((width, height), Image.LANCZOS)
+            # Convert the resized image to PhotoImage
+            photo = ImageTk.PhotoImage(image)
+            # Update the picbox with the resized image
+            picbox.config(image=photo)
+            picbox.image = photo  # Keep a reference to avoid garbage collection
+        except Exception as e:
+            print("Error opening or displaying image:", e)
+
+        delete_button = tk.Button(frame5_inner, text=f"Delete Image {index}", command=lambda index=index-1: delete_image(index))
+        delete_button.grid(row=index, column=1, sticky="nsew")
+        
+        update_button = tk.Button(frame5_inner, text=f"Image Properties {index}", command=lambda index=index-1: update_image_properties(index))
+        update_button.grid(row=index, column=0, sticky="nsew")
+
+        # Append the buttons to their respective lists
+        delete_image_list.append(delete_button)
+        update_image_list.append(update_button)
+
+
     header_frame=tk.Frame(frame2_inner)
 
     def add_header():
@@ -363,7 +510,18 @@ def run_gui():
     button_add_checkbox = tk.Button(frame1, text="Add Checkbox", command=add_checkbox)
     button_add_checkbox.pack()
 
-    button_f = tk.Button(frame4, text="Convert to HTML", command=lambda: (html.convert_frame2_details_to_html(frame2_inner,frame6), css.convert_frame2_details_to_css(frame2_inner,background_var.get())))
+    button_add_image = tk.Button(frame1, text="Add Image", command=add_image)
+    button_add_image.pack()
+
+    def convert_to_html():
+        # Call the convert_frame2_details_to_html function and pass the file_path
+        html.convert_frame2_details_to_html(frame2_inner, frame6, saved_image_path,saved_image_path2)
+        css.convert_frame2_details_to_css(frame2_inner,background_var.get(),saved_image_path,saved_image_path2)
+        print(f"{saved_image_path}")
+        print(f"{saved_image_path2}")
+
+
+    button_f = tk.Button(frame4, text="Convert to HTML", command=lambda: convert_to_html())
     button_f.pack()
 
     button_close = tk.Button(frame4, text="Close App", command=root.destroy)
@@ -417,6 +575,9 @@ def run_gui():
     inyy_var = tk.StringVar(value="0")
     font_var=tk.StringVar()
     font_size_var=tk.IntVar()
+    img_width=tk.StringVar(value="0")
+    img_height=tk.StringVar(value="0")
+
     
     tk.Label(tab1, text="Fontsize:").grid(row=4, column=0, sticky='w')
     font_entry= tk.Entry(tab1,textvariable=font_size_var)
@@ -457,6 +618,14 @@ def run_gui():
     tk.Label(tab2, text="Y Position:-").grid(row=1, column=0, sticky='w')
     x_entry = tk.Entry(tab2, textvariable=inyy_var)
     x_entry.grid(row=1, column=1, sticky="w")
+
+    tk.Label(tab2, text="Image Width:-").grid(row=3, column=0, sticky='w')
+    x_entry = tk.Entry(tab2, textvariable=img_width)
+    x_entry.grid(row=3, column=1, sticky="w")
+
+    tk.Label(tab2, text="Image Height:-").grid(row=4, column=0, sticky='w')
+    x_entry = tk.Entry(tab2, textvariable=img_height)
+    x_entry.grid(row=4, column=1, sticky="w")
     
     
     
@@ -517,7 +686,23 @@ def run_gui():
             last_widget = frame2_inner.winfo_children()[-1]
 
             frame2_inner.configure(bg=background_var.get())
-            image_label.configure(image=picbox.cget('image'))
+
+            global file_path
+            if file_path:  # Check if file_path is not empty
+                try:
+                    # Open the image file using the global file_path variable
+                    image = Image.open(file_path)
+                    # Resize the image to fit the dimensions of the canvas (frame2_inner)
+                    width, height = frame2_inner.winfo_width(), frame2_inner.winfo_height()
+                    image = image.resize((width, height), Image.LANCZOS)
+                    # Convert the resized image to PhotoImage
+                    photo = ImageTk.PhotoImage(image)
+                    # Update the canvas with the resized image
+                    image_label.configure(image=photo)
+                    image_label.image = photo  # Keep a reference to avoid garbage collection
+                except Exception as e:
+                    print("Error opening or displaying image:", e)
+        
             # Implement the logic to update properties of the last widget here
             if isinstance(last_widget, tk.Button):
                 # Get the text from the text box

@@ -1,0 +1,39 @@
+.-1{
+    background-color: SystemButtonFace;
+    color: SystemButtonText;
+    /* Button style for  */
+    position: absolute;
+    left:0.0%;
+    top:0.0%;
+    font-size: 12px;
+    font-family: TkDefaultFont;
+}
+
+}
+
+.0{
+    background-color: SystemButtonFace;
+    color: SystemButtonText;
+    /* Button style for  */
+    position: absolute;
+    left:0.0%;
+    top:15.959999999999999%;
+    font-size: 12px;
+    font-family: TkDefaultFont;
+}
+
+.1{
+    background-color: SystemButtonFace;
+    color: SystemButtonText;
+    /* Button style for  */
+    position: absolute;
+    left:0.0%;
+    top:52.29%;
+    font-size: 12px;
+    font-family: TkDefaultFont;
+}
+
+body {
+    background-color: white;
+}
+
