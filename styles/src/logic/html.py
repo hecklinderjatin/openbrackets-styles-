@@ -33,16 +33,17 @@ def convert_frame2_details_to_html(frame2, frame6, background_image_url, image_p
     </head>
     <body>
     """
-
+    i = -1
     for child in frame2.winfo_children():
         if isinstance(child, tk.Button):
-            html_details += f"<button class='{child.cget('text').lower().replace(' ', '-')}'>{child.cget('text')}</button><br>\n"
+            html_details += f"<button class='{child.cget('text').lower().replace(' ', '-')}{i}'>{child.cget('text')}</button><br>\n"
         elif isinstance(child, tk.Label):
-            html_details += f"<label class='{child.cget('text').lower().replace(' ', '-')}'>{child.cget('text')}</label><br>\n"
+            html_details += f"<label class='{child.cget('text').lower().replace(' ', '-')}{i}'>{child.cget('text')}</label><br>\n"
+            html_details += f"<img src='{image_path}'>\n"
         elif isinstance(child, tk.Checkbutton):
             html_details += f"""<input type="checkbox" class='{child.cget('text').lower().replace(' ', '-')}'>
-            <label class='{child.cget('text').lower().replace(' ', '-')}'>{child.cget('text')}</label><br>\n"""
-        html_details += f"<img src='{image_path}'>\n"
+            <label class='{child.cget('text').lower().replace(' ', '-')}{i}'>{child.cget('text')}</label><br>\n"""
+        i+=1
 
 
     html_details += "\n</body>\n</html>"

@@ -404,6 +404,35 @@ def run_gui():
         update_checkboxes_propertie.append(update_checkboxes_properties_button)  # Append the update button to the list
 
 
+    
+    
+    header_frame=tk.Frame(frame2_inner)
+    def add_header():
+
+        label1 = tk.Label(header_frame, text="jobs", font=("Helvetica", 24), anchor="center", bg="purple")
+        label2 = tk.Label(header_frame, text="Column 2", font=("Helvetica", 24), anchor="center")
+        label3 = tk.Label(header_frame, text="Column 3", font=("Helvetica", 24), anchor="center")
+        label4 = tk.Label(header_frame, text="Column 4", font=("Helvetica", 24), anchor="center")
+        
+        label1.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
+        label2.grid(row=0, column=1, sticky="nsew", padx=5, pady=5)
+        label3.grid(row=0, column=2, sticky="nsew", padx=5, pady=5)
+        label4.grid(row=0, column=3, sticky="nsew", padx=5, pady=5)
+        
+        header_frame.pack(fill="both", expand=True, padx=10, pady=10)
+ 
+
+    def modify_header(lst):
+            header_frame.destroy()
+
+            frame=tk.Frame(frame2_inner)
+            n=len(lst)
+            print(len(lst))
+            for i in range(n):
+                frame.grid_columnconfigure(i, weight=1)
+            for i in range(n):
+                tk.Label(frame, text=lst[i],font=("Helvetica", 24), anchor="center").grid(row=0, column=i, sticky="nsew")
+            frame.pack(fill="both")  
     def add_image():   
         global file_path1  # Use the global keyword to access the global file_path variable
         # Ask the user to select an image file
@@ -467,40 +496,6 @@ def run_gui():
         delete_image_list.append(delete_button)
         update_image_list.append(update_button)
 
-
-    header_frame=tk.Frame(frame2_inner)
-
-    def add_header():
-        
-       
-        header_frame.grid_columnconfigure(0, weight=1)
-        header_frame.grid_columnconfigure(1, weight=1)
-        header_frame.grid_columnconfigure(2, weight=1)
-        header_frame.grid_columnconfigure(3, weight=1)
-
-        label1 = tk.Label(header_frame, text="jobs",font=("Helvetica", 24),anchor="center", bg="purple")
-        label2 = tk.Label(header_frame, text="Column 2",font=("Helvetica", 24), anchor="center")
-        label3 = tk.Label(header_frame, text="Column 3",font=("Helvetica", 24), anchor="center")
-        label4 = tk.Label(header_frame, text="Column 4",font=("Helvetica", 24), anchor="center")
-        
-            
-        label1.grid(row=0, column=0, sticky="nsew")
-        label2.grid(row=0, column=1, sticky="nsew")
-        label3.grid(row=0, column=2, sticky="nsew")
-        label4.grid(row=0, column=3, sticky="nsew")
-        header_frame.pack(fill="both")   
-
-    def modify_header(lst):
-         header_frame.destroy()
-         
-         frame=tk.Frame(frame2_inner)
-
-         n=len(lst)
-         for i in range(n):
-            frame.grid_columnconfigure(i, weight=1)
-         for i in range(n):
-           tk.Label(frame, text=lst[i],font=("Helvetica", 24), anchor="center").grid(row=0, column=i, sticky="nsew")
-
     button_add_button = tk.Button(frame1, text="Add Button", command=add_button)
     button_add_button.pack()
 
@@ -512,6 +507,9 @@ def run_gui():
 
     button_add_image = tk.Button(frame1, text="Add Image", command=add_image)
     button_add_image.pack()
+
+    add_header_button= tk.Button(frame1, text="Add Header", command=lambda: add_header())
+    add_header_button.pack()
 
     def convert_to_html():
         # Call the convert_frame2_details_to_html function and pass the file_path
@@ -627,7 +625,39 @@ def run_gui():
     x_entry = tk.Entry(tab2, textvariable=img_height)
     x_entry.grid(row=4, column=1, sticky="w")
     
-    
+    def modify_header_helper(str_lst):
+        for i in str_lst:
+            entry_list.append(i.get())
+        print("List",entry_list)  
+        modify_header(entry_list)
+
+    def update_entries():
+        for entry in entry_list:
+            entry.grid_forget()
+
+        # Get the new count
+
+        new_count = count.get()
+        str_lst=[]
+        # Create new entries
+        for i in range(new_count):
+            str=tk.StringVar()
+            entry = tk.Entry(tab3,textvariable=str)
+            entry.grid(row=i+2, column=0, sticky="w")
+            str_lst.append(str)
+        tk.Button(tab3, text="reflect", command=lambda: modify_header_helper(str_lst)).grid(row=new_count+1, column=0, columnspan=2)
+
+    count = tk.IntVar(value=0)
+    entry_list = []
+
+    tk.Label(tab3, text="Number:").grid(row=0, column=0, sticky='w')
+    x_entry = tk.Entry(tab3, textvariable=count)
+    x_entry.grid(row=0, column=1, sticky="w")
+
+    update_btn = tk.Button(tab3, text="Update Entries", command=update_entries)
+    update_btn.grid(row=1, column=0, columnspan=2)
+
+
     
     """def on_select(*args):
         selected_item = selected_item_var.get()"""

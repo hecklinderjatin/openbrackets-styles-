@@ -16,7 +16,7 @@ def convert_frame2_details_to_css(frame3, page_color, background_image_path,fram
                 css_details += f"    color: {child.cget('fg')};\n"
                 css_details += f"    /* Button style for {child.cget('text')} */\n"
                 css_details += f"    position: absolute;\n"
-                css_details += f"    left:{int(child.winfo_x())*0.21}%;\n"
+                css_details += f"    left:{int(child.winfo_x())*0.11}%;\n"
                 css_details += f"    top:{int(child.winfo_y())*0.21}%;\n"
 
                 font_string = child.cget('font')
@@ -38,7 +38,7 @@ def convert_frame2_details_to_css(frame3, page_color, background_image_path,fram
                     css_details += f"    color: {child.cget('fg')};\n"
                     css_details += f"    /* Button style for {child.cget('text')} */\n"
                     css_details += f"    position: absolute;\n"
-                    css_details += f"    left:{int(child.winfo_x())*0.21}%;\n"
+                    css_details += f"    left:{int(child.winfo_x())*0.11}%;\n"
                     css_details += f"    top:{int(child.winfo_y())*0.21}%;\n"
 
                     font_string = child.cget('font')
@@ -60,7 +60,7 @@ def convert_frame2_details_to_css(frame3, page_color, background_image_path,fram
                     css_details += f"    color: {child.cget('fg')};\n"
                     css_details += f"    /* Button style for {child.cget('text')} */\n"
                     css_details += f"    position: absolute;\n"
-                    css_details += f"    left:{int(child.winfo_x())*0.21}%;\n"
+                    css_details += f"    left:{int(child.winfo_x())*0.11}%;\n"
                     css_details += f"    top:{int(child.winfo_y())*0.21}%;\n"
 
                     font_string = child.cget('font')
@@ -76,7 +76,9 @@ def convert_frame2_details_to_css(frame3, page_color, background_image_path,fram
 
                     font_family = child.cget('font').split(' ')[0]
                     css_details += f"    font-family: {font_family};\n"
+
             i += 1
+
 
         css_details += "}\n\n"  # End of CSS class definition
 
