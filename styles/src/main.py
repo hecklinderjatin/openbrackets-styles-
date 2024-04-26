@@ -1,5 +1,4 @@
-# main.py
-
+# main.pycle
 from gui.frame import run_gui
 
 if __name__ == "__main__":
