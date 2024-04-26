@@ -1,0 +1,22 @@
+body,html{
+    position:relative;
+}
+
+.hello-every-one0{
+    background-color: #ff80ff;
+    color: #00ffff;
+    /* Label style for HELLO EVERY ONE */
+    position: absolute;
+    left:9%;
+    top:64%;
+}
+
+.submit1{
+    background-color: #8000ff;
+    color: #00ffff;
+    /* Button style for submit */
+    position: absolute;
+    left:15%;
+    top:19%;
+}
+

@@ -6,7 +6,7 @@ from logic import functions
 from logic import html
 from logic import css
 from tkinter import filedialog
-from PIL import Image, ImageTk
+# from PIL import Image, ImageTk
 
 
 def run_gui():
