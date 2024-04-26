@@ -1,59 +1,15 @@
-.new-1{
-    background-color: #db64a8;
+.new-item-1{
+    background-color: black;
     color: white;
-    /* Button style for new */
+    /* Button style for NEW ITEM */
     position: absolute;
-    left:16.28%;
-    top:17.849999999999998%;
-    font-size: 75px;
-    font-family: System;
-}
-
-.b20{
-    background-color: #9eae91;
-    color: white;
-    /* Button style for b2 */
-    position: absolute;
-    left:43.34%;
-    top:21.419999999999998%;
-    font-size: 75px;
-    font-family: System;
-}
-
-.b21{
-    background-color: #6fd0ce;
-    color: white;
-    /* Button style for b2 */
-    position: absolute;
-    left:54.67%;
-    top:9.87%;
-    font-size: 75px;
-    font-family: System;
-}
-
-.2{
-    background-color: SystemButtonFace;
-    color: SystemButtonText;
-    /* Button style for  */
-    position: absolute;
-    left:0.0%;
-    top:0.0%;
-    font-size: 12px;
-    font-family: TkDefaultFont;
-}
-
-.b23{
-    background-color: #6fd0ce;
-    color: white;
-    /* Button style for b2 */
-    position: absolute;
-    left:43.12%;
-    top:63.629999999999995%;
-    font-size: 75px;
+    left:19.25%;
+    top:13.65%;
+    font-size: 60px;
     font-family: System;
 }
 
 body {
-    background-color: #ff8040;
+    background-color: #5ac0e7;
 }
 
