@@ -1,7 +1,6 @@
 import tkinter as tk
-from PIL import Image, ImageTk
 
-def convert_frame2_details_to_html(frame2, frame6, background_image_url, image_path):
+def convert_frame2_details_to_html(frame2_inner,new_frame, frame6, background_image_url, image_path):
     
     html_details = f"""
     <!DOCTYPE html>
@@ -33,17 +32,36 @@ def convert_frame2_details_to_html(frame2, frame6, background_image_url, image_p
     </head>
     <body>
     """
-    i = -1
-    for child in frame2.winfo_children():
+    k=1
+    html_details += f"<div class='navbar'>\n"
+    for child in new_frame.winfo_children():
+        if isinstance(child, tk.Label):
+            html_details += f"     <div class='nav-item'>{child.cget('text').lower()}</div>\n"
+            k=0
+    if k==0:
+        html_details += f"</div>\n"
+
+
+    i = 0
+    for child in frame2_inner.winfo_children():
         if isinstance(child, tk.Button):
             html_details += f"<button class='{child.cget('text').lower().replace(' ', '-')}{i}'>{child.cget('text')}</button><br>\n"
         elif isinstance(child, tk.Label):
-            html_details += f"<label class='{child.cget('text').lower().replace(' ', '-')}{i}'>{child.cget('text')}</label><br>\n"
-            html_details += f"<img src='{image_path}'>\n"
+                html_details += f"<label class='{child.cget('text').lower().replace(' ', '-')}{i}'>{child.cget('text')}</label><br>\n"
         elif isinstance(child, tk.Checkbutton):
             html_details += f"""<input type="checkbox" class='{child.cget('text').lower().replace(' ', '-')}'>
             <label class='{child.cget('text').lower().replace(' ', '-')}{i}'>{child.cget('text')}</label><br>\n"""
         i+=1
+
+    j=0
+    for child in frame2_inner.winfo_children():
+        if isinstance(child, tk.Label):
+            if image_path:
+                html_details += f"""<img src="{image_path}" class = "image{j}">\n"""
+                j+=1
+                break
+        
+  
 
 
     html_details += "\n</body>\n</html>"
